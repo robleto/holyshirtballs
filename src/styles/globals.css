@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-gray-900 antialiased;
+    font-family: var(--font-body, system-ui, -apple-system, sans-serif);
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display, Georgia, serif);
+  }
+}
+
+@layer components {
+  .prose-entry h2 {
+    @apply text-xl font-bold text-gray-900 mb-2 mt-6;
+    font-family: var(--font-display, Georgia, serif);
+  }
+
+  .prose-entry p {
+    @apply text-gray-700 leading-relaxed mb-4;
+  }
+
+  /* Card hover lift */
+  .card-hover {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .card-hover:hover {
+    @apply -translate-y-1 shadow-lg;
+  }
+}
