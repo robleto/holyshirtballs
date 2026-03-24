@@ -10,24 +10,12 @@ import { Shuffle } from 'lucide-react';
 interface HeroProps {
   entryCount: number;
   franchiseCount: number;
-  randomSlug: string;
 }
 
 /*
   Hero section — the site's signature moment.
-
-  Design decisions:
-  - Background: warm cream gradient (cream -> parchment) instead of orange-50 -> white.
-    This connects smoothly to the body background (parchment), preventing the hard edge
-    that occurred when a bright orange gradient met a pure-white body.
-  - Background glyphs: coral at lower opacity (not orange-100/amber-100 which read as pale blobs)
-  - Eyebrow: uses the `eyebrow` utility class with flanking rule bars
-  - Title: letter-spacing tightened for display size; "Balls" span carries the coral
-  - Stats: ink-500 muted text; strong values in ink-800 (not gray-700)
-  - Quick filter pills: outline style matching the Button outline variant
-  - "Browse All" pill: solid coral — intentional hierarchy, not an outlier
 */
-export default function Hero({ entryCount, franchiseCount, randomSlug }: HeroProps) {
+export default function Hero({ entryCount, franchiseCount }: HeroProps) {
   const router = useRouter();
   const [search, setSearch] = useState('');
   const mediaQuickFilters: Medium[] = ['TV', 'Film', 'Comic', 'Book', 'Game', 'Animation'];

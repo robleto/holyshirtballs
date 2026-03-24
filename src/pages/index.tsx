@@ -16,7 +16,6 @@ interface TaxItem { name: string; count: number; }
 interface HomeProps {
   entryCount: number;
   franchiseCount: number;
-  randomSlug: string;
   mostIconic: Entry[];
   mildest: Entry[];
   mostInventive: Entry[];
@@ -29,7 +28,6 @@ interface HomeProps {
 const Home: NextPage<HomeProps> = ({
   entryCount,
   franchiseCount,
-  randomSlug,
   mostIconic,
   mildest,
   mostInventive,
@@ -48,7 +46,7 @@ const Home: NextPage<HomeProps> = ({
         />
       </Head>
 
-      <Hero entryCount={entryCount} franchiseCount={franchiseCount} randomSlug={randomSlug} />
+      <Hero entryCount={entryCount} franchiseCount={franchiseCount} />
 
       {/*
         Homepage content sections.
@@ -168,13 +166,10 @@ export const getStaticProps: GetStaticProps<HomeProps> = () => {
   const sections = getFeaturedSections();
   const franchiseCount = getAllFranchises().length;
 
-  const randomSlug = allEntries[Math.floor(Math.random() * allEntries.length)]?.slug ?? '';
-
   return {
     props: {
       entryCount:    allEntries.length,
       franchiseCount,
-      randomSlug,
       mostIconic:    sections.mostIconic,
       mildest:       sections.mildest,
       mostInventive: sections.mostInventive,
