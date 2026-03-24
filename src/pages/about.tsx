@@ -77,7 +77,7 @@ const About: NextPage = () => {
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
             >
-              entries from dozens of franchises
+              entries across dozens of franchises
             </Link>{' '}
             across TV, film, books, comics, games, and animation. It grows through community contributions &mdash;
             every entry can be proposed, refined, and fact-checked through pull requests on GitHub.
@@ -95,8 +95,7 @@ const About: NextPage = () => {
           <h2>Contributing</h2>
 
           <p>
-            The archive is open source and community-maintained. If you know a fictional expletive not yet
-            in the archive, we want to hear from you.{' '}
+            The archive is open source. If you know a fictional expletive that isn&rsquo;t here yet, add it.{' '}
             <Link
               href="/contribute"
               className="transition-colors duration-150"

@@ -2,6 +2,8 @@ import Link from 'next/link';
 import SearchBar from './SearchBar';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import MediumIcon from './ui/MediumIcon';
+import type { Medium } from '@/types/entry';
 
 interface HeroProps {
   entryCount: number;
@@ -25,6 +27,7 @@ interface HeroProps {
 export default function Hero({ entryCount, franchiseCount }: HeroProps) {
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const mediaQuickFilters: Medium[] = ['TV', 'Film', 'Comic', 'Book', 'Game', 'Animation'];
 
   const handleSearch = (value: string) => {
     if (value.trim()) {
@@ -99,8 +102,8 @@ export default function Hero({ entryCount, franchiseCount }: HeroProps) {
             color: '#4A3F3A',
           }}
         >
-          The internet&rsquo;s most comprehensive archive of made-up swear words, curses, insults,
-          and taboo expressions &mdash; from every corner of film, TV, books, comics, and games.
+          Every made-up swear word, curse, insult, and taboo expression from every corner of film,
+          TV, books, comics, and games. Documented properly.
         </p>
 
         {/* Stats — subdued, precise */}
@@ -121,45 +124,33 @@ export default function Hero({ entryCount, franchiseCount }: HeroProps) {
           />
         </div>
 
-        {/* Quick filter pills — outline + one solid primary */}
-        <div className="flex flex-wrap justify-center gap-2">
-          {['TV', 'Film', 'Comic', 'Book', 'Game', 'Animation'].map((medium) => (
+        {/* Quick filter pills */}
+        <div className="space-y-2">
+          <div className="flex flex-wrap justify-center gap-2">
+            {mediaQuickFilters.map((medium) => (
             <Link
               key={medium}
               href={`/browse?medium=${medium}`}
-              className="px-3.5 py-1.5 text-sm font-semibold rounded-full bg-white transition-all duration-150"
-              style={{
-                border: '1px solid #D4CCC8',
-                color: '#4A3F3A',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = '#F55D35';
-                (e.currentTarget as HTMLElement).style.color = '#F55D35';
-                (e.currentTarget as HTMLElement).style.background = '#FFF4EE';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = '#D4CCC8';
-                (e.currentTarget as HTMLElement).style.color = '#4A3F3A';
-                (e.currentTarget as HTMLElement).style.background = 'white';
-              }}
+              className="hero-pill inline-flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-semibold rounded-full"
             >
-              {medium}
+              <MediumIcon medium={medium} size={13} className="opacity-90" />
+              <span>{medium}</span>
             </Link>
-          ))}
+            ))}
+          </div>
+
           {/* Primary CTA pill — solid coral */}
-          <Link
-            href="/browse"
-            className="px-3.5 py-1.5 text-sm font-semibold rounded-full text-white transition-colors duration-150"
-            style={{ background: '#F55D35' }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = '#D94A22';
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = '#F55D35';
-            }}
-          >
-            Browse All &rarr;
-          </Link>
+          <div className="flex justify-center pt-1">
+            <Link
+              href="/browse"
+              className="px-3.5 py-1.5 text-sm font-semibold rounded-full text-white transition-colors duration-150"
+              style={{ background: '#F55D35' }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#D94A22'; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = '#F55D35'; }}
+            >
+              Browse the Archive &rarr;
+            </Link>
+          </div>
         </div>
       </div>
     </section>

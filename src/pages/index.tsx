@@ -45,17 +45,17 @@ const Home: NextPage<HomeProps> = ({
           subtitle="The fictional swear words that escaped the screen and entered real life."
           entries={mostIconic}
           browseLink="/browse"
-          browseLinkLabel="Browse all entries"
+          browseLinkLabel="Browse the archive"
         />
 
         <div className="section-divider" />
 
         <FeaturedSection
           title="Mildest of the Mild"
-          subtitle="Family-friendly cursing for when you need to express yourself without consequences."
+          subtitle="When you need to swear but the situation requires plausible deniability."
           entries={mildest}
           browseLink="/browse?severity=Mild"
-          browseLinkLabel="See all mild entries"
+          browseLinkLabel="Browse mild entries"
         />
 
         <div className="section-divider" />
@@ -72,7 +72,7 @@ const Home: NextPage<HomeProps> = ({
 
         <FeaturedSection
           title="From Sci-Fi &amp; Fantasy"
-          subtitle="Where creativity in profanity reaches its highest density."
+          subtitle="Sci-fi and fantasy writers have always had the best swear words. Here's the proof."
           entries={fromSciFi}
           browseLink="/browse?medium=TV"
           browseLinkLabel="Browse TV entries"
@@ -97,8 +97,7 @@ const Home: NextPage<HomeProps> = ({
             Know a fictional swear we&rsquo;re missing?
           </h2>
           <p className="mb-6 max-w-lg mx-auto text-sm leading-relaxed" style={{ color: '#6B5E58' }}>
-            The archive grows through community contributions. If you&rsquo;ve spotted a fictional expletive
-            not yet catalogued here, we want to hear from you.
+            The archive grows one entry at a time. If you&rsquo;ve spotted a fictional expletive that isn&rsquo;t here yet, add it.
           </p>
           <a
             href="/contribute"
@@ -107,7 +106,7 @@ const Home: NextPage<HomeProps> = ({
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#D94A22'; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = '#F55D35'; }}
           >
-            Contribute an Entry
+            Add to the Archive
           </a>
         </section>
       </div>

@@ -16,7 +16,7 @@ interface EmptyStateProps {
 */
 export default function EmptyState({ search, onClear }: EmptyStateProps) {
   return (
-    <div className="py-24 text-center">
+    <div className="py-24 text-center empty-state-appear">
       {/* Typographic glyph instead of emoji — stays in the site's editorial register */}
       <div
         className="font-display font-extrabold leading-none mb-6 select-none"
@@ -34,13 +34,13 @@ export default function EmptyState({ search, onClear }: EmptyStateProps) {
         className="font-display font-bold text-2xl mb-2"
         style={{ color: '#4A3F3A', letterSpacing: '-0.01em' }}
       >
-        {search ? `No results for \u201c${search}\u201d` : 'Nothing found'}
+        {search ? `No results for \u201c${search}\u201d` : 'Nothing matched those filters.'}
       </h3>
 
       <p className="text-sm mb-6 max-w-sm mx-auto leading-relaxed" style={{ color: '#8C807A' }}>
         {search
           ? 'Try a different term, franchise, or quote. The archive is vast \u2014 but not infinite.'
-          : 'Adjust your filters to find what you\u2019re looking for.'}
+          : 'Try loosening a filter or two. The archive is bigger than it looks.'}
       </p>
 
       {onClear && (

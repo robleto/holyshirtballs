@@ -46,9 +46,8 @@ export default function RelatedEntries({ entries }: RelatedEntriesProps) {
           >
             <div className="flex-1 min-w-0">
               <p
-                className="font-display font-bold truncate transition-colors duration-150"
+                className="font-display font-bold truncate transition-colors duration-150 group-hover:text-[#F55D35]"
                 style={{ color: '#1A1210', fontSize: '0.9375rem' }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
               >
                 {entry.term}
               </p>

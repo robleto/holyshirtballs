@@ -80,7 +80,7 @@ const Browse: NextPage<BrowseProps> = ({ allEntries: entries, franchises }) => {
         <title>Browse &mdash; HolyShirtBalls</title>
         <meta
           name="description"
-          content={`Browse ${entries.length} fictional profanity entries. Filter by franchise, medium, category, and severity.`}
+          content={`${entries.length} fictional profanity entries across ${franchises.length} franchises. Filter by medium, category, severity, or franchise.`}
         />
       </Head>
 
@@ -96,7 +96,7 @@ const Browse: NextPage<BrowseProps> = ({ allEntries: entries, franchises }) => {
             Browse the Archive
           </h1>
           <p className="text-sm" style={{ color: '#8C807A' }}>
-            {entries.length} entries across {franchises.length} franchises. Filter, search, and discover.
+            {entries.length} entries across {franchises.length} franchises.
           </p>
         </div>
 

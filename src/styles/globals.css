@@ -102,13 +102,17 @@
     border: 1px solid var(--ink-100);
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-card);
-    @apply transition-all duration-200 ease-out;
+    transition: border-color 200ms ease-in-out, box-shadow 200ms ease-in-out, transform 200ms ease-in-out;
   }
 
   .card:hover {
     border-color: var(--coral-alpha30);
     box-shadow: var(--shadow-card-hover);
     @apply -translate-y-0.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card:hover { transform: none; }
   }
 
   /* Featured card variant — coral ring */
@@ -118,13 +122,48 @@
 
   /* Deprecated alias — retained for any direct usages */
   .card-hover {
-    @apply transition-all duration-200 ease-out;
+    transition: border-color 200ms ease-in-out, box-shadow 200ms ease-in-out, transform 200ms ease-in-out;
   }
 
   .card-hover:hover {
     border-color: var(--coral-alpha30);
     box-shadow: var(--shadow-card-hover);
     @apply -translate-y-0.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-hover:hover { transform: none; }
+  }
+
+  /* ── Hero filter pills ── */
+  /* Using CSS class instead of inline onMouseEnter/Leave so transitions actually work */
+  .hero-pill {
+    border: 1px solid #D4CCC8;
+    color: #4A3F3A;
+    background: white;
+    transition: border-color 150ms ease-in-out, color 150ms ease-in-out, background-color 150ms ease-in-out;
+  }
+
+  .hero-pill:hover {
+    border-color: #F55D35;
+    color: #F55D35;
+    background: #FFF4EE;
+  }
+
+  /* ── EmptyState entrance — fade-in only, no transform ── */
+  /* Applied when results drop to zero. 150ms is below the "noticeable animation" threshold
+     but long enough to signal a state change rather than a page error. */
+  @keyframes fade-in-quick {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .empty-state-appear {
+    animation: fade-in-quick 150ms ease-out forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .empty-state-appear { animation: none; }
   }
 
   /* ── Section label (uppercase eyebrow treatment) ── */
@@ -152,6 +191,8 @@
     border-left: 2px solid var(--ink-100);
   }
 
+  /* Glow ring removed: previously had box-shadow coral halo which added noise.
+     Solid dot + body-bg border provides sufficient visual separation. */
   .timeline-dot {
     background: var(--coral);
     border: 2px solid var(--bg-page);
@@ -166,11 +207,12 @@
   }
 
   /* ── Quote block (entry detail) ── */
+  /* Softened: left bar only (no fill background), thinner border, coral at 40% alpha.
+     Previously the filled warm bg + full coral border made quotes visually heavier than
+     section headers, inverting the structural hierarchy of the page. */
   .quote-block {
-    background: var(--bg-subtle);
-    border-left: 3px solid var(--coral);
-    border-radius: 0 var(--radius-card) var(--radius-card) 0;
-    @apply px-6 py-5;
+    border-left: 2px solid rgba(245, 93, 53, 0.4);
+    @apply px-6 py-4;
   }
 
   /* ── Filter bar surface ── */
@@ -180,6 +222,40 @@
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-card);
     @apply p-4;
+  }
+
+  /* ── Filter label — quieter than .eyebrow, for dense control surfaces ──
+     Use inside FilterBar and any inline form control label.
+     The .eyebrow pattern is reserved for page-level headers and hero sections.
+     Here ink-500 + medium weight reads as a label without drawing the eye. */
+  .filter-label {
+    @apply text-xs font-medium uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-500);
+  }
+
+  /* ── Speech bubble tail — bottom-left notch matching the logomark shape ── */
+  /* Rotated square so border + box-shadow work naturally (border-trick triangles can't). */
+  /* The top half of the square is hidden behind the card; the bottom half is the tail. */
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -7px;
+    left: 22px;
+    width: 13px;
+    height: 13px;
+    background: #ffffff;
+    border-right: 1px solid var(--ink-100);
+    border-bottom: 1px solid var(--ink-100);
+    transform: rotate(45deg);
+    box-shadow: 2px 2px 4px rgba(26, 18, 16, 0.05);
+    transition: border-color 200ms ease-in-out, box-shadow 200ms ease-in-out;
+  }
+
+  .speech-bubble:hover::after {
+    border-right-color: var(--coral-alpha30);
+    border-bottom-color: var(--coral-alpha30);
+    box-shadow: 4px 8px 16px rgba(26, 18, 16, 0.10);
   }
 
   /* ── Code block — warmer than gray-900 + green-300 ── */

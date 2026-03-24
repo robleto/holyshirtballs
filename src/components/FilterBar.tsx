@@ -11,12 +11,15 @@ interface FilterBarProps {
 /*
   FilterBar — browsing controls surface.
 
-  Design decisions:
+  Design decisions (post-polish pass 2026-03-23):
   - Surface: bg-muted (#F5EFEB) — warmer than gray-50, fits the parchment body
   - Border: ink-100 with a warm card shadow — gives it body, not just a flat container
-  - Labels: coral eyebrow treatment (uppercase, tracked) — elevates the filter UX
-  - Selects: white background on warm surface = clear contrast; warm border on focus
-  - Focus ring: coral — consistent with site-wide interaction color
+  - Labels: downgraded from full eyebrow treatment (coral, uppercase, font-bold, tracked)
+    to a quieter utility label (ink-500, font-medium, still uppercase for scannability).
+    The eyebrow pattern is meaningful on page-level headers (index, browse, about) where
+    it sets an editorial tone. Inside a dense filter bar, the same treatment becomes noise —
+    5 coral labels in close proximity dilutes the coral accent significantly.
+  - Focus ring: coral retained — consistent with site-wide interaction color
   - Result count: right-aligned, ink-500 muted text
   - Clear filters: coral underline, right-aligned above result count
 */
@@ -35,8 +38,8 @@ function Select<T extends string>({
   return (
     <div className="flex flex-col gap-1 min-w-0">
       <label
-        className="text-xs font-bold uppercase"
-        style={{ letterSpacing: '0.09em', color: '#F55D35' }}
+        className="text-xs font-medium uppercase"
+        style={{ letterSpacing: '0.06em', color: '#8C807A' }}
       >
         {label}
       </label>
@@ -106,7 +109,7 @@ export default function FilterBar({ filters, franchises, onFilterChange, resultC
           label="Severity"
           value={filters.severity}
           options={[
-            { value: '', label: 'All Severities' },
+            { value: '', label: 'Any Severity' },
             ...SEVERITIES.map((s) => ({ value: s, label: s })),
           ]}
           onChange={(v) => set({ severity: v as Severity | '' })}
@@ -115,8 +118,8 @@ export default function FilterBar({ filters, franchises, onFilterChange, resultC
         {/* Franchise select — slightly wider */}
         <div className="flex flex-col gap-1 min-w-0">
           <label
-            className="text-xs font-bold uppercase"
-            style={{ letterSpacing: '0.09em', color: '#F55D35' }}
+            className="text-xs font-medium uppercase"
+            style={{ letterSpacing: '0.06em', color: '#8C807A' }}
           >
             Franchise
           </label>
@@ -146,8 +149,8 @@ export default function FilterBar({ filters, franchises, onFilterChange, resultC
         {/* Sort */}
         <div className="flex flex-col gap-1 min-w-0">
           <label
-            className="text-xs font-bold uppercase"
-            style={{ letterSpacing: '0.09em', color: '#F55D35' }}
+            className="text-xs font-medium uppercase"
+            style={{ letterSpacing: '0.06em', color: '#8C807A' }}
           >
             Sort
           </label>

@@ -150,3 +150,47 @@ export function getFeaturedSections() {
 export const MEDIUMS: Medium[] = ['TV', 'Film', 'Book', 'Comic', 'Game', 'Animation'];
 export const CATEGORIES: Category[] = ['Expletive', 'Insult', 'Euphemism', 'Curse', 'Oath', 'Slang'];
 export const SEVERITIES: Severity[] = ['Mild', 'Moderate', 'Strong', 'Extreme'];
+
+// Slugify a franchise name → url-safe string
+export function franchiseToSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[/:()]/g, ' ')
+    .replace(/\s+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+// All franchises with 2+ entries → {slug, name, count}[]
+export function getAllFranchisePages(): { slug: string; name: string; count: number }[] {
+  const counts = new Map<string, number>();
+  for (const e of allEntries) {
+    counts.set(e.franchise, (counts.get(e.franchise) ?? 0) + 1);
+  }
+  const result: { slug: string; name: string; count: number }[] = [];
+  for (const [name, count] of counts.entries()) {
+    if (count >= 2) {
+      result.push({ slug: franchiseToSlug(name), name, count });
+    }
+  }
+  return result.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+// Get franchise name from slug
+export function getFranchiseBySlug(slug: string): string | undefined {
+  return allEntries.find((e) => franchiseToSlug(e.franchise) === slug)?.franchise;
+}
+
+// Get entries for a franchise name
+export function getEntriesByFranchise(franchiseName: string): Entry[] {
+  return allEntries.filter((e) => e.franchise === franchiseName);
+}
+
+// Get entries by medium
+export function getEntriesByMedium(medium: string): Entry[] {
+  return allEntries.filter((e) => e.medium.toLowerCase() === medium.toLowerCase());
+}
+
+// Get entries by category
+export function getEntriesByCategory(category: string): Entry[] {
+  return allEntries.filter((e) => e.category.toLowerCase() === category.toLowerCase());
+}

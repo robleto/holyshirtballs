@@ -24,7 +24,7 @@ interface SearchBarProps {
 export default function SearchBar({
   value,
   onChange,
-  placeholder = 'Search terms, franchises, quotes\u2026',
+  placeholder = 'Search by word, franchise, or quote\u2026',
   onSubmit,
   autoFocus,
 }: SearchBarProps) {

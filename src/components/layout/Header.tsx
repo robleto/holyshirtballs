@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
+import { MessageSquareWarning } from 'lucide-react';
 
 interface HeaderProps {
   randomSlug?: string;
@@ -57,13 +58,12 @@ export default function Header({ randomSlug }: HeaderProps) {
           onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#1A1210'; }}
         >
           {/* Coral glyph — the site's signature mark */}
-          <span
-            className="font-display font-extrabold text-xl leading-none"
+          <MessageSquareWarning
+            size={22}
             style={{ color: '#F55D35' }}
+            strokeWidth={1.75}
             aria-hidden
-          >
-            @#$!
-          </span>
+          />
           <span>HolyShirtBalls</span>
         </Link>
 
