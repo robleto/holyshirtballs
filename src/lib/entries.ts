@@ -194,3 +194,8 @@ export function getEntriesByMedium(medium: string): Entry[] {
 export function getEntriesByCategory(category: string): Entry[] {
   return allEntries.filter((e) => e.category.toLowerCase() === category.toLowerCase());
 }
+
+// Get entries by severity
+export function getEntriesBySeverity(severity: string): Entry[] {
+  return allEntries.filter((e) => e.severity.toLowerCase() === severity.toLowerCase());
+}

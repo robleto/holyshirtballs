@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import type { Entry } from '@/types/entry';
-import Badge, { SeverityDot } from '@/components/ui/Badge';
+import Badge from '@/components/ui/Badge';
 import MediumIcon from '@/components/ui/MediumIcon';
 import { franchiseToSlug } from '@/lib/entries';
 
 interface EntryCardProps {
   entry: Entry;
   featured?: boolean;
+  hideContext?: 'medium' | 'category' | 'severity';
 }
 
 /*
@@ -34,7 +35,7 @@ interface EntryCardProps {
   so the header stays pure text. Category badge now uses its color — only one colored
   element in the footer at a time, so the color earns its place.
 */
-export default function EntryCard({ entry, featured = false }: EntryCardProps) {
+export default function EntryCard({ entry, featured = false, hideContext }: EntryCardProps) {
   return (
     <Link
       href={`/entry/${entry.slug}`}
@@ -85,10 +86,11 @@ export default function EntryCard({ entry, featured = false }: EntryCardProps) {
         {entry.shortDescription}
       </p>
 
-      {/* Footer: severity dot + category badge — dot moved here so header stays clean text */}
+      {/* Footer: medium + category + severity badges — suppress whichever matches current page context */}
       <div className="flex items-center flex-wrap gap-1.5 pt-0.5">
-        <SeverityDot severity={entry.severity} />
-        <Badge label={entry.category} variant="category" size="sm" />
+        {hideContext !== 'medium'   && <Badge label={entry.medium}   variant="medium"   size="sm" />}
+        {hideContext !== 'category' && <Badge label={entry.category} variant="category" size="sm" />}
+        {hideContext !== 'severity' && <Badge label={entry.severity} variant="severity" size="sm" />}
       </div>
     </Link>
   );

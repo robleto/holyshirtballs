@@ -4,10 +4,13 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import MediumIcon from './ui/MediumIcon';
 import type { Medium } from '@/types/entry';
+import { getAllSlugs } from '@/lib/entries';
+import { Shuffle } from 'lucide-react';
 
 interface HeroProps {
   entryCount: number;
   franchiseCount: number;
+  randomSlug: string;
 }
 
 /*
@@ -24,7 +27,7 @@ interface HeroProps {
   - Quick filter pills: outline style matching the Button outline variant
   - "Browse All" pill: solid coral — intentional hierarchy, not an outlier
 */
-export default function Hero({ entryCount, franchiseCount }: HeroProps) {
+export default function Hero({ entryCount, franchiseCount, randomSlug }: HeroProps) {
   const router = useRouter();
   const [search, setSearch] = useState('');
   const mediaQuickFilters: Medium[] = ['TV', 'Film', 'Comic', 'Book', 'Game', 'Animation'];
@@ -37,6 +40,12 @@ export default function Hero({ entryCount, franchiseCount }: HeroProps) {
     }
   };
 
+  const handleLucky = () => {
+    const slugs = getAllSlugs();
+    const slug = slugs[Math.floor(Math.random() * slugs.length)];
+    router.push(`/entry/${slug}`);
+  };
+
   return (
     <section
       className="relative overflow-hidden border-b"
@@ -46,10 +55,10 @@ export default function Hero({ entryCount, franchiseCount }: HeroProps) {
       }}
     >
       {/* Background glyph decoration — coral at 8% opacity, rotated for energy */}
-      <div className="absolute inset-0 pointer-events-none select-none overflow-hidden" aria-hidden>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" aria-hidden>
         {/* Top-left large glyph */}
         <span
-          className="absolute -top-6 -left-6 font-display font-extrabold leading-none"
+          className="absolute font-extrabold leading-none -top-6 -left-6 font-display"
           style={{
             fontSize: '14rem',
             color: 'rgba(245, 93, 53, 0.06)',
@@ -61,7 +70,7 @@ export default function Hero({ entryCount, franchiseCount }: HeroProps) {
         </span>
         {/* Bottom-right smaller glyph */}
         <span
-          className="absolute -bottom-8 -right-4 font-display font-extrabold leading-none"
+          className="absolute font-extrabold leading-none -bottom-8 -right-4 font-display"
           style={{
             fontSize: '9rem',
             color: 'rgba(245, 93, 53, 0.05)',
@@ -73,10 +82,10 @@ export default function Hero({ entryCount, franchiseCount }: HeroProps) {
         </span>
       </div>
 
-      <div className="relative max-w-5xl mx-auto px-4 py-20 sm:py-28 text-center">
+      <div className="relative max-w-5xl px-4 py-20 mx-auto text-center sm:py-28">
 
         {/* Eyebrow label */}
-        <p className="eyebrow mb-5">
+        <p className="mb-5 eyebrow">
           <span className="w-8 h-px bg-current opacity-60" />
           A Fictional Profanity Dictionary
           <span className="w-8 h-px bg-current opacity-60" />
@@ -96,7 +105,7 @@ export default function Hero({ entryCount, franchiseCount }: HeroProps) {
 
         {/* Subtitle */}
         <p
-          className="max-w-2xl mx-auto leading-relaxed mb-3"
+          className="max-w-2xl mx-auto mb-3 leading-relaxed"
           style={{
             fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
             color: '#4A3F3A',
@@ -107,50 +116,47 @@ export default function Hero({ entryCount, franchiseCount }: HeroProps) {
         </p>
 
         {/* Stats — subdued, precise */}
-        <p className="text-sm mb-10" style={{ color: '#8C807A' }}>
+        <p className="mb-10 text-sm" style={{ color: '#8C807A' }}>
           <strong style={{ color: '#1A1210', fontWeight: 700 }}>{entryCount}</strong> entries across{' '}
           <strong style={{ color: '#1A1210', fontWeight: 700 }}>{franchiseCount}</strong> franchises.{' '}
           All completely fake. All deeply studied.
         </p>
 
-        {/* Search */}
-        <div className="max-w-xl mx-auto mb-8">
-          <SearchBar
-            value={search}
-            onChange={setSearch}
-            onSubmit={handleSearch}
-            placeholder='Try "frak", "Good Place", or "Huttese"\u2026'
-            autoFocus={false}
-          />
+        {/* Search + Feeling Lucky */}
+        <div className="max-w-2xl mx-auto mb-8 flex items-center gap-3">
+          <div className="flex-1">
+            <SearchBar
+              value={search}
+              onChange={setSearch}
+              onSubmit={handleSearch}
+              placeholder='Try "frak", "Good Place", or "Huttese"'
+              autoFocus={false}
+            />
+          </div>
+          <button
+            onClick={handleLucky}
+            className="shrink-0 inline-flex items-center gap-2 px-4 py-3 rounded-2xl text-sm font-semibold text-white transition-colors duration-150"
+            style={{ background: '#F55D35' }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#D94A22'; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = '#F55D35'; }}
+          >
+            <Shuffle size={15} strokeWidth={2.25} aria-hidden />
+            Random
+          </button>
         </div>
 
         {/* Quick filter pills */}
-        <div className="space-y-2">
-          <div className="flex flex-wrap justify-center gap-2">
-            {mediaQuickFilters.map((medium) => (
-            <Link
-              key={medium}
-              href={`/browse?medium=${medium}`}
-              className="hero-pill inline-flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-semibold rounded-full"
-            >
-              <MediumIcon medium={medium} size={13} className="opacity-90" />
-              <span>{medium}</span>
-            </Link>
-            ))}
-          </div>
-
-          {/* Primary CTA pill — solid coral */}
-          <div className="flex justify-center pt-1">
-            <Link
-              href="/browse"
-              className="px-3.5 py-1.5 text-sm font-semibold rounded-full text-white transition-colors duration-150"
-              style={{ background: '#F55D35' }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#D94A22'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = '#F55D35'; }}
-            >
-              Browse the Archive &rarr;
-            </Link>
-          </div>
+        <div className="flex flex-wrap justify-center gap-2">
+          {mediaQuickFilters.map((medium) => (
+          <Link
+            key={medium}
+            href={`/medium/${medium.toLowerCase()}`}
+            className="hero-pill inline-flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-semibold rounded-full"
+          >
+            <MediumIcon medium={medium} size={13} className="opacity-90" />
+            <span>{medium}</span>
+          </Link>
+          ))}
         </div>
       </div>
     </section>

@@ -1,11 +1,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
-import { MessageSquareWarning } from 'lucide-react';
+import { Compass, Info, PenLine } from 'lucide-react';
+import LogoIcon from '@/components/ui/LogoIcon';
 
-interface HeaderProps {
-  randomSlug?: string;
-}
 
 /*
   Header — sticky nav with warm parchment background.
@@ -20,7 +18,7 @@ interface HeaderProps {
     shadow created a heavier visual break than the site's tone requires
   - Random button: dice icon kept; styling matches ghost nav treatment
 */
-export default function Header({ randomSlug }: HeaderProps) {
+export default function Header() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -31,9 +29,9 @@ export default function Header({ randomSlug }: HeaderProps) {
   }, [router.events]);
 
   const nav = [
-    { href: '/browse',     label: 'Browse' },
-    { href: '/about',      label: 'About' },
-    { href: '/contribute', label: 'Contribute' },
+    { href: '/browse',     label: 'Explore',    icon: Compass  },
+    { href: '/about',      label: 'About',      icon: Info     },
+    { href: '/contribute', label: 'Contribute', icon: PenLine  },
   ];
 
   const isActive = (href: string) =>
@@ -57,76 +55,41 @@ export default function Header({ randomSlug }: HeaderProps) {
           onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
           onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#1A1210'; }}
         >
-          {/* Coral glyph — the site's signature mark */}
-          <MessageSquareWarning
-            size={22}
-            style={{ color: '#F55D35' }}
-            strokeWidth={1.75}
-            aria-hidden
-          />
+          <LogoIcon size={22} />
           <span>HolyShirtBalls</span>
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-0.5" aria-label="Main navigation">
-          {nav.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150"
-              style={
-                isActive(href)
-                  ? { background: '#FFF4EE', color: '#F55D35' }
-                  : { color: '#4A3F3A' }
-              }
-              onMouseEnter={(e) => {
-                if (!isActive(href)) {
-                  (e.currentTarget as HTMLElement).style.background = '#FAF7F5';
-                  (e.currentTarget as HTMLElement).style.color = '#1A1210';
+        {/* Nav + mobile toggle — all right-aligned */}
+        <div className="flex items-center gap-0.5">
+          <nav className="hidden md:flex items-center gap-0.5" aria-label="Main navigation">
+            {nav.map(({ href, label, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150"
+                style={
+                  isActive(href)
+                    ? { background: '#FFF4EE', color: '#F55D35' }
+                    : { color: '#4A3F3A' }
                 }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive(href)) {
-                  (e.currentTarget as HTMLElement).style.background = 'transparent';
-                  (e.currentTarget as HTMLElement).style.color = '#4A3F3A';
-                }
-              }}
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Actions */}
-        <div className="flex items-center gap-2">
-          {/* Random entry — dice icon, ghost treatment */}
-          {randomSlug && (
-            <Link
-              href={`/entry/${randomSlug}`}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150"
-              style={{ color: '#6B5E58' }}
-              title="Random entry"
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background = '#FFF4EE';
-                (e.currentTarget as HTMLElement).style.color = '#F55D35';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.background = 'transparent';
-                (e.currentTarget as HTMLElement).style.color = '#6B5E58';
-              }}
-            >
-              {/* Dice icon — no emoji replacement needed; SVG is more consistent */}
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-                <rect x="3" y="3" width="18" height="18" rx="3" />
-                <circle cx="8.5" cy="8.5" r="1.25" fill="currentColor" stroke="none" />
-                <circle cx="15.5" cy="8.5" r="1.25" fill="currentColor" stroke="none" />
-                <circle cx="8.5" cy="15.5" r="1.25" fill="currentColor" stroke="none" />
-                <circle cx="15.5" cy="15.5" r="1.25" fill="currentColor" stroke="none" />
-                <circle cx="12" cy="12" r="1.25" fill="currentColor" stroke="none" />
-              </svg>
-              Random
-            </Link>
-          )}
+                onMouseEnter={(e) => {
+                  if (!isActive(href)) {
+                    (e.currentTarget as HTMLElement).style.background = '#FAF7F5';
+                    (e.currentTarget as HTMLElement).style.color = '#1A1210';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive(href)) {
+                    (e.currentTarget as HTMLElement).style.background = 'transparent';
+                    (e.currentTarget as HTMLElement).style.color = '#4A3F3A';
+                  }
+                }}
+              >
+                <Icon size={14} strokeWidth={2} aria-hidden />
+                {label}
+              </Link>
+            ))}
+          </nav>
 
           {/* Mobile menu toggle */}
           <button
@@ -160,29 +123,21 @@ export default function Header({ randomSlug }: HeaderProps) {
             borderTopColor: '#F2EDEA',
           }}
         >
-          {nav.map(({ href, label }) => (
+          {nav.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}
-              className="px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150"
               style={
                 isActive(href)
                   ? { background: '#FFF4EE', color: '#F55D35' }
                   : { color: '#4A3F3A' }
               }
             >
+              <Icon size={14} strokeWidth={2} aria-hidden />
               {label}
             </Link>
           ))}
-          {randomSlug && (
-            <Link
-              href={`/entry/${randomSlug}`}
-              className="px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150"
-              style={{ color: '#4A3F3A' }}
-            >
-              Random Entry
-            </Link>
-          )}
         </div>
       )}
     </header>

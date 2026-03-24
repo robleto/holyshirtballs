@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import LogoIcon from '@/components/ui/LogoIcon';
 
 /*
   Footer — grounded, editorial.
@@ -27,11 +28,9 @@ export default function Footer() {
 
           {/* Brand block */}
           <div>
-            <p
-              className="font-display font-extrabold text-lg mb-2"
-              style={{ color: '#1A1210' }}
-            >
-              <span style={{ color: '#F55D35' }}>@#$!</span>{' '}HolyShirtBalls
+            <p className="flex items-center gap-2 font-display font-extrabold text-lg mb-2" style={{ color: '#1A1210' }}>
+              <LogoIcon size={22} />
+              HolyShirtBalls
             </p>
             <p className="text-sm leading-relaxed" style={{ color: '#6B5E58' }}>
               The definitive archive of fictional profanity from film, TV, books, comics, and games.
@@ -49,12 +48,12 @@ export default function Footer() {
             </p>
             <nav className="flex flex-col gap-2">
               {[
-                { href: '/browse',              label: 'Browse All' },
-                { href: '/browse?medium=TV',    label: 'TV' },
-                { href: '/browse?medium=Film',  label: 'Film' },
-                { href: '/browse?medium=Comic', label: 'Comics' },
-                { href: '/browse?medium=Book',  label: 'Books' },
-                { href: '/browse?medium=Game',  label: 'Games' },
+                { href: '/browse',          label: 'Explore All' },
+                { href: '/medium/tv',       label: 'TV' },
+                { href: '/medium/film',     label: 'Film' },
+                { href: '/medium/comic',    label: 'Comics' },
+                { href: '/medium/book',     label: 'Books' },
+                { href: '/medium/game',     label: 'Games' },
               ].map(({ href, label }) => (
                 <Link
                   key={href}

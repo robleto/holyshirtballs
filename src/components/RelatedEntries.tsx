@@ -23,8 +23,8 @@ export default function RelatedEntries({ entries }: RelatedEntriesProps) {
   return (
     <section aria-label="Related entries">
       <h2
-        className="font-display font-bold text-lg mb-4"
-        style={{ color: '#1A1210', letterSpacing: '-0.01em' }}
+        className="font-sans text-xs font-bold uppercase mb-4"
+        style={{ color: '#F55D35', letterSpacing: '0.09em' }}
       >
         Related Entries
       </h2>

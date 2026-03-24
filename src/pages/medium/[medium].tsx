@@ -48,13 +48,13 @@ const MediumPage: NextPage<MediumPageProps> = ({ medium, entries }) => {
           </Link>
           <span style={{ color: '#D4CCC8' }}>/</span>
           <Link
-            href="/browse"
+            href="/medium"
             className="transition-colors duration-150"
             style={{ color: '#B0A49E' }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
           >
-            Archive
+            Medium
           </Link>
           <span style={{ color: '#D4CCC8' }}>/</span>
           <span style={{ color: '#4A3F3A' }}>{medium}</span>
@@ -91,7 +91,7 @@ const MediumPage: NextPage<MediumPageProps> = ({ medium, entries }) => {
         {/* Entry grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {entries.map((entry) => (
-            <EntryCard key={entry.slug} entry={entry} />
+            <EntryCard key={entry.slug} entry={entry} hideContext="medium" />
           ))}
         </div>
       </div>

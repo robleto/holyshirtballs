@@ -7,6 +7,7 @@ import { allEntries, getEntryBySlug, getAllSlugs, getRelatedEntries, franchiseTo
 import Badge from '@/components/ui/Badge';
 import MediumIcon from '@/components/ui/MediumIcon';
 import RelatedEntries from '@/components/RelatedEntries';
+import { SiX, SiBluesky, SiThreads, SiReddit, SiPinterest, SiInstagram } from 'react-icons/si';
 
 interface EntryPageProps {
   entry: Entry;
@@ -30,10 +31,10 @@ interface EntryPageProps {
 */
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="mb-10 pt-7 border-t" style={{ borderColor: '#F2EDEA' }}>
+    <div className="py-7">
       <h2
-        className="text-sm font-bold uppercase mb-4"
-        style={{ color: '#F55D35', letterSpacing: '0.12em' }}
+        className="font-sans text-xs font-bold uppercase pb-3 mb-4 border-b"
+        style={{ color: '#F55D35', letterSpacing: '0.09em', borderColor: '#F2EDEA' }}
       >
         {title}
       </h2>
@@ -85,74 +86,97 @@ function SemanticTimeline({ data }: { data: SemanticDriftEntry[] | string }) {
   );
 }
 
-/*
-  Copy/share button — inline action.
-*/
-function ShareButton({ url }: { url: string }) {
-  const [copied, setCopied] = useState(false);
-  const [fading, setFading] = useState(false);
+/* ── Social share panel ─────────────────────────────────────────────────── */
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(url);
-      // Brief fade-out, swap content, fade back in
-      setFading(true);
-      setTimeout(() => {
-        setCopied(true);
-        setFading(false);
-        setTimeout(() => setCopied(false), 2000);
-      }, 80);
-    } catch {
-      // clipboard API not available
+function SharePanel({ entry }: { entry: Entry }) {
+  const [copied, setCopied] = useState(false);
+  const pageUrl = `https://holyshirtballs.fyi/entry/${entry.slug}`;
+  const enc = encodeURIComponent;
+
+  const shortText   = `"${entry.term}" (${entry.franchise}) ≈ "${entry.englishEquivalent}" — fictional ${entry.category.toLowerCase()}`;
+  const postText    = `${shortText}\n${pageUrl}`;
+  const pinDesc     = `"${entry.term}" ≈ "${entry.englishEquivalent}" — ${entry.category} from ${entry.franchise}. Severity: ${entry.severity}. From HolyShirtBalls: the archive of fictional profanity from film, TV, books, comics, and games.`;
+  const redditTitle = `"${entry.term}" — fictional ${entry.category.toLowerCase()} from ${entry.franchise} (≈ "${entry.englishEquivalent}")`;
+
+  const links = [
+    { label: 'X',         href: `https://twitter.com/intent/tweet?text=${enc(shortText)}&url=${enc(pageUrl)}`,                          Icon: SiX },
+    { label: 'Bluesky',   href: `https://bsky.app/intent/compose?text=${enc(postText)}`,                                                 Icon: SiBluesky },
+    { label: 'Threads',   href: `https://www.threads.net/intent/post?text=${enc(postText)}`,                                             Icon: SiThreads },
+    { label: 'Reddit',    href: `https://reddit.com/submit?url=${enc(pageUrl)}&title=${enc(redditTitle)}`,                               Icon: SiReddit },
+    { label: 'Pinterest', href: `https://pinterest.com/pin/create/button/?url=${enc(pageUrl)}&description=${enc(pinDesc)}`,              Icon: SiPinterest },
+  ];
+
+  const handleInstagram = async () => {
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title: `"${entry.term}" — HolyShirtBalls`, text: shortText, url: pageUrl });
+        return;
+      } catch { /* cancelled or unsupported */ }
     }
+    await navigator.clipboard.writeText(`${shortText}\n${pageUrl}`).catch(() => {});
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const btnBase = {
+    borderColor: '#E8E2DE', color: '#8C807A', background: 'white',
+  };
+  const btnHover = (e: React.MouseEvent<HTMLElement>) => {
+    (e.currentTarget as HTMLElement).style.borderColor = '#F55D35';
+    (e.currentTarget as HTMLElement).style.color = '#F55D35';
+    (e.currentTarget as HTMLElement).style.background = '#FFF4EE';
+  };
+  const btnLeave = (e: React.MouseEvent<HTMLElement>) => {
+    (e.currentTarget as HTMLElement).style.borderColor = '#E8E2DE';
+    (e.currentTarget as HTMLElement).style.color = '#8C807A';
+    (e.currentTarget as HTMLElement).style.background = 'white';
   };
 
   return (
-    <button
-      onClick={handleCopy}
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium border bg-white transition-all duration-150"
-      style={{ borderColor: '#D4CCC8', color: '#4A3F3A' }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = '#F55D35';
-        (e.currentTarget as HTMLElement).style.color = '#F55D35';
-        (e.currentTarget as HTMLElement).style.background = '#FFF4EE';
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = '#D4CCC8';
-        (e.currentTarget as HTMLElement).style.color = '#4A3F3A';
-        (e.currentTarget as HTMLElement).style.background = 'white';
-      }}
-      title="Copy link"
-    >
-      <span
-        className="inline-flex items-center gap-1.5 transition-opacity duration-100"
-        style={{ opacity: fading ? 0 : 1 }}
-      >
-        {copied ? (
-          <>
-            <svg className="w-4 h-4" style={{ color: '#059669' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-            <span style={{ color: '#059669' }}>Copied!</span>
-          </>
-        ) : (
-          <>
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
-            Copy link
-          </>
-        )}
-      </span>
-    </button>
+    <div className="rounded-[1.25rem] p-5" style={{ background: 'white', border: '1px solid #F2EDEA' }}>
+      <h2 className="font-sans text-xs font-bold uppercase mb-4" style={{ color: '#F55D35', letterSpacing: '0.09em' }}>
+        Share
+      </h2>
+      <div className="grid grid-cols-3 gap-2">
+        {links.map(({ label, href, Icon }) => (
+          <a
+            key={label}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={`Share on ${label}`}
+            className="inline-flex items-center justify-center h-9 rounded-xl border transition-all duration-150"
+            style={btnBase}
+            onMouseEnter={btnHover}
+            onMouseLeave={btnLeave}
+          >
+            <Icon size={16} aria-hidden />
+            <span className="sr-only">{label}</span>
+          </a>
+        ))}
+
+        {/* Instagram — native share sheet on mobile, clipboard fallback on desktop */}
+        <button
+          onClick={handleInstagram}
+          title={copied ? 'Copied!' : 'Share on Instagram'}
+          className="inline-flex items-center justify-center h-9 rounded-xl border transition-all duration-150"
+          style={copied ? { borderColor: '#059669', color: '#059669', background: 'white' } : btnBase}
+          onMouseEnter={copied ? undefined : btnHover}
+          onMouseLeave={copied ? undefined : btnLeave}
+        >
+          {copied
+            ? <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+            : <SiInstagram size={16} aria-hidden />
+          }
+          <span className="sr-only">Share on Instagram</span>
+        </button>
+      </div>
+    </div>
   );
 }
 
 /* ── Main page ─────────────────────────────────────────────────────────── */
 const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount }) => {
-  const pageUrl = typeof window !== 'undefined'
-    ? window.location.href
-    : `https://holyshirtballs.fyi/entry/${entry.slug}`;
 
   return (
     <>
@@ -184,7 +208,7 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
           >
-            Archive
+            Explore
           </Link>
           <span style={{ color: '#D4CCC8' }}>/</span>
           <span style={{ color: '#4A3F3A' }}>{entry.term}</span>
@@ -192,10 +216,11 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
 
         {/* Entry header */}
         <header className="mb-10">
-          {/* Franchise + media context */}
-          <div className="flex flex-wrap items-center gap-2 mb-4">
+          {/* Franchise + medium icon */}
+          <div className="flex items-center gap-1.5 mb-4">
+            <MediumIcon medium={entry.medium} size={14} className="text-[#B0A49E]" />
             <Link
-              href={`/browse?franchise=${encodeURIComponent(entry.franchise)}`}
+              href={`/franchise/${franchiseToSlug(entry.franchise)}`}
               className="text-sm font-medium transition-colors duration-150"
               style={{ color: '#8C807A' }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
@@ -203,10 +228,6 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
             >
               {entry.franchise}
             </Link>
-            <span style={{ color: '#D4CCC8' }}>&middot;</span>
-            <Badge label={entry.medium} variant="medium" size="sm" href={`/medium/${entry.medium.toLowerCase()}`} icon={<MediumIcon medium={entry.medium} size={12} />} />
-            <Badge label={entry.category} variant="category" size="sm" href={`/category/${entry.category.toLowerCase()}`} />
-            <Badge label={entry.severity} variant="severity" size="sm" />
           </div>
 
           {/* Term — the hero display type */}
@@ -244,29 +265,6 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
             {entry.shortDescription}
           </p>
 
-          {/* Actions */}
-          <div className="flex flex-wrap gap-2">
-            <ShareButton url={pageUrl} />
-            {franchiseCount > 1 && (
-              <Link
-                href={`/franchise/${franchiseToSlug(entry.franchise)}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium border bg-white transition-all duration-150"
-                style={{ borderColor: '#D4CCC8', color: '#4A3F3A' }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = '#F55D35';
-                  (e.currentTarget as HTMLElement).style.color = '#F55D35';
-                  (e.currentTarget as HTMLElement).style.background = '#FFF4EE';
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = '#D4CCC8';
-                  (e.currentTarget as HTMLElement).style.color = '#4A3F3A';
-                  (e.currentTarget as HTMLElement).style.background = 'white';
-                }}
-              >
-                More from {entry.franchise.split(' / ')[0]} &rarr;
-              </Link>
-            )}
-          </div>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -292,7 +290,7 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
                   &ldquo;{entry.exampleQuote.text}&rdquo;
                 </blockquote>
                 <cite className="text-sm not-italic" style={{ color: '#8C807A' }}>
-                  &mdash; {entry.exampleQuote.source || entry.notableSpeaker}
+                  &mdash; {entry.notableSpeaker || entry.exampleQuote.source}
                 </cite>
               </div>
             )}
@@ -356,8 +354,8 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
               style={{ background: '#F5EFEB', border: '1px solid #F2EDEA' }}
             >
               <h2
-                className="text-sm font-bold uppercase mb-4"
-                style={{ color: '#4A3F3A', letterSpacing: '0.09em' }}
+                className="font-sans text-xs font-bold uppercase mb-4"
+                style={{ color: '#F55D35', letterSpacing: '0.09em' }}
               >
                 At a Glance
               </h2>
@@ -385,13 +383,13 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
               style={{ background: 'white', border: '1px solid #F2EDEA' }}
             >
               <h2
-                className="text-sm font-bold uppercase mb-4"
-                style={{ color: '#4A3F3A', letterSpacing: '0.09em' }}
+                className="font-sans text-xs font-bold uppercase mb-4"
+                style={{ color: '#F55D35', letterSpacing: '0.09em' }}
               >
                 Classification
               </h2>
               <div className="flex flex-wrap gap-2">
-                <Badge label={entry.severity} variant="severity" size="md" />
+                <Badge label={entry.severity} variant="severity" size="md" href={`/severity/${entry.severity.toLowerCase()}`} />
                 <Badge label={entry.category} variant="category" size="md" href={`/category/${entry.category.toLowerCase()}`} />
                 <Badge label={entry.medium} variant="medium" size="md" href={`/medium/${entry.medium.toLowerCase()}`} icon={<MediumIcon medium={entry.medium} size={14} />} />
               </div>
@@ -399,6 +397,9 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
 
             {/* Related entries */}
             {related.length > 0 && <RelatedEntries entries={related} />}
+
+            {/* Share panel */}
+            <SharePanel entry={entry} />
 
             {/* Back to browse */}
             <div className="text-center">
@@ -409,7 +410,7 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
               >
-                &larr; Back to Browse
+                &larr; Back to Explore
               </Link>
             </div>
           </aside>

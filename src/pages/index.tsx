@@ -1,26 +1,42 @@
 import type { GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import Hero from '@/components/Hero';
 import FeaturedSection from '@/components/FeaturedSection';
+import TaxCard, { MEDIUM_DESC, CATEGORY_DESC, SEVERITY_DESC } from '@/components/TaxCard';
 import type { Entry } from '@/types/entry';
-import { allEntries, getFeaturedSections, getAllFranchises } from '@/lib/entries';
+import {
+  allEntries, getFeaturedSections, getAllFranchises,
+  MEDIUMS, CATEGORIES, SEVERITIES,
+  getEntriesByMedium, getEntriesByCategory, getEntriesBySeverity,
+} from '@/lib/entries';
+
+interface TaxItem { name: string; count: number; }
 
 interface HomeProps {
   entryCount: number;
   franchiseCount: number;
+  randomSlug: string;
   mostIconic: Entry[];
   mildest: Entry[];
   mostInventive: Entry[];
   fromSciFi: Entry[];
+  mediums: TaxItem[];
+  categories: TaxItem[];
+  severities: TaxItem[];
 }
 
 const Home: NextPage<HomeProps> = ({
   entryCount,
   franchiseCount,
+  randomSlug,
   mostIconic,
   mildest,
   mostInventive,
   fromSciFi,
+  mediums,
+  categories,
+  severities,
 }) => {
   return (
     <>
@@ -32,7 +48,7 @@ const Home: NextPage<HomeProps> = ({
         />
       </Head>
 
-      <Hero entryCount={entryCount} franchiseCount={franchiseCount} />
+      <Hero entryCount={entryCount} franchiseCount={franchiseCount} randomSlug={randomSlug} />
 
       {/*
         Homepage content sections.
@@ -74,7 +90,7 @@ const Home: NextPage<HomeProps> = ({
           title="From Sci-Fi &amp; Fantasy"
           subtitle="Sci-fi and fantasy writers have always had the best swear words. Here's the proof."
           entries={fromSciFi}
-          browseLink="/browse?medium=TV"
+          browseLink="/medium/tv"
           browseLinkLabel="Browse TV entries"
         />
 
@@ -109,6 +125,40 @@ const Home: NextPage<HomeProps> = ({
             Add to the Archive
           </a>
         </section>
+
+        {/* Taxonomy browse sections */}
+        <div className="section-divider" />
+
+        {(['medium', 'category', 'severity'] as const).map((type) => {
+          const items = type === 'medium' ? mediums : type === 'category' ? categories : severities;
+          const descs = type === 'medium' ? MEDIUM_DESC : type === 'category' ? CATEGORY_DESC : SEVERITY_DESC;
+          const title = type === 'medium' ? 'Browse by Medium' : type === 'category' ? 'Browse by Category' : 'Browse by Severity';
+          const href  = `/${type}`;
+          const cols  = type === 'severity' ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-2 lg:grid-cols-3';
+          return (
+            <section key={type} className="mb-12">
+              <div className="flex items-baseline justify-between mb-5">
+                <h2 className="font-display font-extrabold text-2xl" style={{ color: '#1A1210', letterSpacing: '-0.01em' }}>
+                  {title}
+                </h2>
+                <Link
+                  href={href}
+                  className="text-sm font-medium transition-colors duration-150"
+                  style={{ color: '#B0A49E' }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
+                >
+                  See all &rarr;
+                </Link>
+              </div>
+              <div className={`grid grid-cols-1 sm:${cols} gap-4`}>
+                {items.map(({ name, count }) => (
+                  <TaxCard key={name} type={type} href={`/${type}/${name.toLowerCase()}`} name={name} description={descs[name] ?? ''} count={count} />
+                ))}
+              </div>
+            </section>
+          );
+        })}
       </div>
     </>
   );
@@ -118,14 +168,20 @@ export const getStaticProps: GetStaticProps<HomeProps> = () => {
   const sections = getFeaturedSections();
   const franchiseCount = getAllFranchises().length;
 
+  const randomSlug = allEntries[Math.floor(Math.random() * allEntries.length)]?.slug ?? '';
+
   return {
     props: {
-      entryCount: allEntries.length,
+      entryCount:    allEntries.length,
       franchiseCount,
+      randomSlug,
       mostIconic:    sections.mostIconic,
       mildest:       sections.mildest,
       mostInventive: sections.mostInventive,
       fromSciFi:     sections.fromSciFi,
+      mediums:       MEDIUMS.map((name) => ({ name, count: getEntriesByMedium(name).length })),
+      categories:    CATEGORIES.map((name) => ({ name, count: getEntriesByCategory(name).length })),
+      severities:    SEVERITIES.map((name) => ({ name, count: getEntriesBySeverity(name).length })),
     },
   };
 };

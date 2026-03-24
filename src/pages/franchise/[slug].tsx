@@ -46,7 +46,7 @@ const FranchisePage: NextPage<FranchisePageProps> = ({ franchiseName, entries, p
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
           >
-            Archive
+            Franchise
           </Link>
           <span style={{ color: '#D4CCC8' }}>/</span>
           <span style={{ color: '#4A3F3A' }}>{franchiseName}</span>

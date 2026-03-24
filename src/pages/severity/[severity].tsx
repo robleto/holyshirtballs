@@ -2,35 +2,29 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import type { Entry } from '@/types/entry';
-import { CATEGORIES, getEntriesByCategory } from '@/lib/entries';
+import { SEVERITIES, getEntriesBySeverity } from '@/lib/entries';
 import EntryCard from '@/components/EntryCard';
 
-interface CategoryPageProps {
-  category: string;
+interface SeverityPageProps {
+  severity: string;
   entries: Entry[];
 }
 
-/*
-  One sentence per category — what this word type is doing and why it's interesting.
-  Not a dictionary definition. A point of view.
-*/
-const CATEGORY_FRAMES: Record<string, string> = {
-  Expletive: 'Pure emotional discharge. The expletive exists to carry force, not meaning — and the best fictional ones land immediately, before a reader even knows what they signify.',
-  Insult: 'Targeted and personal. Fictional insults reveal social hierarchies: who can be degraded, in what terms, and what the choice of words says about the insulter as much as the target.',
-  Euphemism: 'The polite route around something impolite. Euphemisms are often the most culturally revealing words in a fiction — they show what a society acknowledges but can\'t bring itself to say directly.',
-  Curse: 'Invocations with intent. Curses carry structure and weight, and usually a mythology behind them. The fictional curse tells you what a world fears.',
-  Oath: 'The solemn register. Oaths are what characters swear by, which tells you what they hold sacred. A fiction\'s oaths are a shortcut to its cosmology.',
-  Slang: 'The informal layer — words that signal in-group membership and generational identity. Slang ages the fastest and dates a work most precisely. It\'s also the category most likely to escape into the real world.',
+const SEVERITY_FRAMES: Record<string, string> = {
+  Mild:     'The words you can say in front of your parents. Fictional mild language tends toward creative substitution — the writers had to work harder to make something that felt like swearing without crossing a line.',
+  Moderate: 'The middle register. Moderate fictional profanity is the workhorse of invented language — strong enough to carry weight in a scene, acceptable enough to air before the watershed.',
+  Strong:   'Words with genuine edge. Strong fictional profanity usually carries cultural or social freight within its world — they land hard on characters and audiences both.',
+  Extreme:  'The words a fictional world reserves for its worst moments. Extreme entries are the ones that carry the most worldbuilding weight — they reveal what a society considers truly unspeakable.',
 };
 
-const CategoryPage: NextPage<CategoryPageProps> = ({ category, entries }) => {
-  const frame = CATEGORY_FRAMES[category];
+const SeverityPage: NextPage<SeverityPageProps> = ({ severity, entries }) => {
+  const frame = SEVERITY_FRAMES[severity];
 
   return (
     <>
       <Head>
-        <title>{category} &mdash; HolyShirtBalls</title>
-        <meta name="description" content={frame ?? `${entries.length} fictional ${category.toLowerCase()} words and expressions.`} />
+        <title>{severity} &mdash; HolyShirtBalls</title>
+        <meta name="description" content={frame ?? `${entries.length} fictional words rated ${severity.toLowerCase()} severity.`} />
       </Head>
 
       <div className="max-w-6xl mx-auto px-4 py-10">
@@ -47,16 +41,16 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, entries }) => {
           </Link>
           <span style={{ color: '#D4CCC8' }}>/</span>
           <Link
-            href="/category"
+            href="/severity"
             className="transition-colors duration-150"
             style={{ color: '#B0A49E' }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
           >
-            Category
+            Severity
           </Link>
           <span style={{ color: '#D4CCC8' }}>/</span>
-          <span style={{ color: '#4A3F3A' }}>{category}</span>
+          <span style={{ color: '#4A3F3A' }}>{severity}</span>
         </nav>
 
         {/* Page header */}
@@ -65,7 +59,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, entries }) => {
             className="text-xs font-bold uppercase mb-4"
             style={{ color: '#F55D35', letterSpacing: '0.15em' }}
           >
-            Category
+            Severity
           </p>
           <h1
             className="font-display font-extrabold leading-none mb-6"
@@ -75,7 +69,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, entries }) => {
               letterSpacing: '-0.02em',
             }}
           >
-            {category}
+            {severity}
           </h1>
           {frame && (
             <p className="leading-relaxed mb-6" style={{ fontSize: '1.125rem', color: '#2D2420', maxWidth: '52ch' }}>
@@ -90,7 +84,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, entries }) => {
         {/* Entry grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {entries.map((entry) => (
-            <EntryCard key={entry.slug} entry={entry} hideContext="category" />
+            <EntryCard key={entry.slug} entry={entry} hideContext="severity" />
           ))}
         </div>
       </div>
@@ -100,24 +94,24 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, entries }) => {
 
 export const getStaticPaths: GetStaticPaths = () => {
   return {
-    paths: CATEGORIES.map((c) => ({ params: { category: c.toLowerCase() } })),
+    paths: SEVERITIES.map((s) => ({ params: { severity: s.toLowerCase() } })),
     fallback: false,
   };
 };
 
-export const getStaticProps: GetStaticProps<CategoryPageProps> = ({ params }) => {
-  const categoryParam = params?.category as string;
-  const category = CATEGORIES.find((c) => c.toLowerCase() === categoryParam);
+export const getStaticProps: GetStaticProps<SeverityPageProps> = ({ params }) => {
+  const severityParam = params?.severity as string;
+  const severity = SEVERITIES.find((s) => s.toLowerCase() === severityParam);
 
-  if (!category) {
+  if (!severity) {
     return { notFound: true };
   }
 
-  const entries = getEntriesByCategory(category);
+  const entries = getEntriesBySeverity(severity);
 
   return {
-    props: { category, entries },
+    props: { severity, entries },
   };
 };
 
-export default CategoryPage;
+export default SeverityPage;
