@@ -2,37 +2,235 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────
+   CSS CUSTOM PROPERTIES
+   Design tokens that can't live in Tailwind config
+   (e.g. gradient stops, ink-on-parchment combos)
+   ───────────────────────────────────────────── */
+:root {
+  /* Core brand */
+  --coral:         #F55D35;
+  --coral-hover:   #D94A22;
+  --coral-alpha12: rgba(245, 93, 53, 0.12);
+  --coral-alpha20: rgba(245, 93, 53, 0.20);
+  --coral-alpha30: rgba(245, 93, 53, 0.30);
+
+  /* Surface warmth — warm off-white, not cool white */
+  --bg-page:    #FFFCF9;  /* Body background: warm parchment */
+  --bg-surface: #FFFFFF;  /* Cards, dropdowns: pure white for contrast on parchment */
+  --bg-subtle:  #FFF4EE;  /* Hover states, warm tinted panels */
+  --bg-muted:   #F5EFEB;  /* FilterBar, sidebar panels, footer */
+
+  /* Ink — warm near-black scale (replaces gray-* utility drift) */
+  --ink-900: #1A1210;
+  --ink-700: #4A3F3A;
+  --ink-500: #8C807A;
+  --ink-300: #D4CCC8;
+  --ink-100: #F2EDEA;
+
+  /* Typography */
+  --font-display-weight: 800;
+  --tracking-display: -0.025em;
+  --tracking-label:    0.09em;
+
+  /* Radius */
+  --radius-card: 1.25rem;  /* 20px */
+  --radius-badge: 9999px;
+  --radius-input: 0.875rem; /* 14px — tighter than card, wider than button */
+
+  /* Shadow — warm-tinted, not cool gray */
+  --shadow-card:       0 1px 3px rgba(26, 18, 16, 0.06), 0 1px 2px rgba(26, 18, 16, 0.04);
+  --shadow-card-hover: 0 8px 24px rgba(26, 18, 16, 0.10), 0 2px 6px rgba(26, 18, 16, 0.06);
+}
+
+/* ─────────────────────────────────────────────
+   BASE LAYER
+   ───────────────────────────────────────────── */
 @layer base {
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-white text-gray-900 antialiased;
+    /* Warm parchment background — the page "paper" */
+    background-color: var(--bg-page);
+    color: var(--ink-900);
     font-family: var(--font-body, system-ui, -apple-system, sans-serif);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, h4, h5 {
+  /* Display font applied to all headings — eliminates inline style drift */
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display, Georgia, serif);
+  }
+
+  /* Phonetic / monospace spans inherit mono stack */
+  .font-mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   }
 }
 
+/* ─────────────────────────────────────────────
+   COMPONENT LAYER
+   Reusable utility classes that enforce the system
+   ───────────────────────────────────────────── */
 @layer components {
+
+  /* ── Page section container ── */
+  .section-container {
+    @apply max-w-6xl mx-auto px-4;
+  }
+
+  /* ── Prose body (About, Contribute pages) ── */
   .prose-entry h2 {
-    @apply text-xl font-bold text-gray-900 mb-2 mt-6;
+    /* Section headers inside prose blocks */
+    @apply text-xl font-bold mt-8 mb-3;
+    color: var(--ink-900);
     font-family: var(--font-display, Georgia, serif);
+    letter-spacing: -0.01em;
   }
 
   .prose-entry p {
-    @apply text-gray-700 leading-relaxed mb-4;
+    color: var(--ink-700);
+    @apply leading-relaxed mb-4;
   }
 
-  /* Card hover lift */
+  /* ── Card — the system's primary surface ── */
+  .card {
+    background: var(--bg-surface);
+    border: 1px solid var(--ink-100);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .card:hover {
+    border-color: var(--coral-alpha30);
+    box-shadow: var(--shadow-card-hover);
+    @apply -translate-y-0.5;
+  }
+
+  /* Featured card variant — coral ring */
+  .card-featured {
+    box-shadow: 0 0 0 2px var(--coral-alpha20), var(--shadow-card);
+  }
+
+  /* Deprecated alias — retained for any direct usages */
   .card-hover {
     @apply transition-all duration-200 ease-out;
   }
 
   .card-hover:hover {
-    @apply -translate-y-1 shadow-lg;
+    border-color: var(--coral-alpha30);
+    box-shadow: var(--shadow-card-hover);
+    @apply -translate-y-0.5;
+  }
+
+  /* ── Section label (uppercase eyebrow treatment) ── */
+  .section-label {
+    @apply text-xs font-bold uppercase;
+    letter-spacing: var(--tracking-label);
+    color: var(--coral);
+  }
+
+  /* ── Section divider — warmer, more visible than border-gray-100 ── */
+  .section-divider {
+    border-top: 1px solid var(--ink-100);
+  }
+
+  /* ── Sidebar panel ── */
+  .sidebar-panel {
+    background: var(--bg-muted);
+    border: 1px solid var(--ink-100);
+    border-radius: var(--radius-card);
+    @apply p-5;
+  }
+
+  /* ── Semantic timeline (entry detail) ── */
+  .timeline-line {
+    border-left: 2px solid var(--ink-100);
+  }
+
+  .timeline-dot {
+    background: var(--coral);
+    border: 2px solid var(--bg-page);
+    @apply w-3 h-3 rounded-full;
+  }
+
+  /* ── Eyebrow / label pair used in hero + interior headers ── */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-bold uppercase;
+    letter-spacing: var(--tracking-label);
+    color: var(--coral);
+  }
+
+  /* ── Quote block (entry detail) ── */
+  .quote-block {
+    background: var(--bg-subtle);
+    border-left: 3px solid var(--coral);
+    border-radius: 0 var(--radius-card) var(--radius-card) 0;
+    @apply px-6 py-5;
+  }
+
+  /* ── Filter bar surface ── */
+  .filter-surface {
+    background: var(--bg-muted);
+    border: 1px solid var(--ink-100);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    @apply p-4;
+  }
+
+  /* ── Code block — warmer than gray-900 + green-300 ── */
+  .code-block {
+    background: #2D1F1A;           /* Warm near-black — fits the site's warmth */
+    color: #F5D4B0;                 /* Warm amber-cream instead of green-300 */
+    border-radius: 0.875rem;
+    @apply p-4 text-sm overflow-x-auto font-mono;
+  }
+
+  /* ── Inline code ── */
+  .inline-code {
+    background: var(--ink-100);
+    color: var(--coral);
+    @apply px-1.5 py-0.5 rounded text-xs font-mono;
+  }
+
+  /* ── Warm info callout (Contribute page "Before you contribute" box) ── */
+  .callout-warm {
+    background: var(--bg-subtle);
+    border: 1px solid var(--coral-alpha20);
+    border-radius: var(--radius-card);
+    @apply p-5;
+  }
+
+  /* ── Table styling for Contribute page ── */
+  .data-table {
+    @apply w-full text-sm;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    border: 1px solid var(--ink-100);
+  }
+
+  .data-table thead tr {
+    background: var(--bg-muted);
+  }
+
+  .data-table th {
+    color: var(--ink-700);
+    @apply px-4 py-3 text-left font-semibold;
+  }
+
+  .data-table tbody tr {
+    border-top: 1px solid var(--ink-100);
+  }
+
+  .data-table tbody tr:hover {
+    background: var(--bg-subtle);
+  }
+
+  .data-table td {
+    @apply px-4 py-3;
   }
 }

@@ -8,6 +8,19 @@ interface FilterBarProps {
   resultCount: number;
 }
 
+/*
+  FilterBar — browsing controls surface.
+
+  Design decisions:
+  - Surface: bg-muted (#F5EFEB) — warmer than gray-50, fits the parchment body
+  - Border: ink-100 with a warm card shadow — gives it body, not just a flat container
+  - Labels: coral eyebrow treatment (uppercase, tracked) — elevates the filter UX
+  - Selects: white background on warm surface = clear contrast; warm border on focus
+  - Focus ring: coral — consistent with site-wide interaction color
+  - Result count: right-aligned, ink-500 muted text
+  - Clear filters: coral underline, right-aligned above result count
+*/
+
 function Select<T extends string>({
   label,
   value,
@@ -21,13 +34,27 @@ function Select<T extends string>({
 }) {
   return (
     <div className="flex flex-col gap-1 min-w-0">
-      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{label}</label>
+      <label
+        className="text-xs font-bold uppercase"
+        style={{ letterSpacing: '0.09em', color: '#F55D35' }}
+      >
+        {label}
+      </label>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as T | '')}
-        className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700
-          focus:outline-none focus:ring-2 focus:ring-brand-coral focus:border-transparent
-          min-w-[140px]"
+        className="rounded-xl border bg-white px-3 py-2 text-sm appearance-none
+          focus:outline-none focus:ring-2 focus:ring-[#F55D35] focus:border-transparent
+          transition-colors duration-150 min-w-[140px]"
+        style={{
+          borderColor: '#D4CCC8',
+          color: '#2D2420',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238C807A' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'right 0.75rem center',
+          backgroundSize: '1rem',
+          paddingRight: '2.5rem',
+        }}
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>
@@ -46,7 +73,14 @@ export default function FilterBar({ filters, franchises, onFilterChange, resultC
     filters.medium || filters.category || filters.severity || filters.franchise;
 
   return (
-    <div className="bg-gray-50 rounded-2xl border border-gray-100 p-4">
+    <div
+      className="rounded-[1.25rem] p-4"
+      style={{
+        background: '#F5EFEB',
+        border: '1px solid #F2EDEA',
+        boxShadow: '0 1px 4px rgba(26, 18, 16, 0.05)',
+      }}
+    >
       <div className="flex flex-wrap gap-4 items-end">
         <Select<Medium>
           label="Medium"
@@ -78,14 +112,29 @@ export default function FilterBar({ filters, franchises, onFilterChange, resultC
           onChange={(v) => set({ severity: v as Severity | '' })}
         />
 
+        {/* Franchise select — slightly wider */}
         <div className="flex flex-col gap-1 min-w-0">
-          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Franchise</label>
+          <label
+            className="text-xs font-bold uppercase"
+            style={{ letterSpacing: '0.09em', color: '#F55D35' }}
+          >
+            Franchise
+          </label>
           <select
             value={filters.franchise}
             onChange={(e) => set({ franchise: e.target.value })}
-            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700
-              focus:outline-none focus:ring-2 focus:ring-brand-coral focus:border-transparent
-              min-w-[180px]"
+            className="rounded-xl border bg-white px-3 py-2 text-sm appearance-none
+              focus:outline-none focus:ring-2 focus:ring-[#F55D35] focus:border-transparent
+              transition-colors duration-150 min-w-[180px]"
+            style={{
+              borderColor: '#D4CCC8',
+              color: '#2D2420',
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238C807A' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 0.75rem center',
+              backgroundSize: '1rem',
+              paddingRight: '2.5rem',
+            }}
           >
             <option value="">All Franchises</option>
             {franchises.map((f) => (
@@ -94,34 +143,54 @@ export default function FilterBar({ filters, franchises, onFilterChange, resultC
           </select>
         </div>
 
+        {/* Sort */}
         <div className="flex flex-col gap-1 min-w-0">
-          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Sort</label>
+          <label
+            className="text-xs font-bold uppercase"
+            style={{ letterSpacing: '0.09em', color: '#F55D35' }}
+          >
+            Sort
+          </label>
           <select
             value={filters.sort}
             onChange={(e) => set({ sort: e.target.value as BrowseFilters['sort'] })}
-            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700
-              focus:outline-none focus:ring-2 focus:ring-brand-coral focus:border-transparent
-              min-w-[140px]"
+            className="rounded-xl border bg-white px-3 py-2 text-sm appearance-none
+              focus:outline-none focus:ring-2 focus:ring-[#F55D35] focus:border-transparent
+              transition-colors duration-150 min-w-[140px]"
+            style={{
+              borderColor: '#D4CCC8',
+              color: '#2D2420',
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238C807A' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 0.75rem center',
+              backgroundSize: '1rem',
+              paddingRight: '2.5rem',
+            }}
           >
-            <option value="alpha">A → Z</option>
+            <option value="alpha">A &rarr; Z</option>
             <option value="franchise">Franchise</option>
             <option value="severity">Most Extreme</option>
           </select>
         </div>
 
+        {/* Result count + clear */}
         <div className="flex flex-col justify-end gap-1 ml-auto">
           {hasActiveFilters && (
             <button
               onClick={() =>
                 onFilterChange({ search: filters.search, medium: '', category: '', severity: '', franchise: '', sort: 'alpha' })
               }
-              className="text-xs text-brand-coral hover:underline"
+              className="text-xs font-medium transition-colors duration-150 text-right"
+              style={{ color: '#F55D35' }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
             >
               Clear filters
             </button>
           )}
-          <p className="text-sm text-gray-500 text-right">
-            {resultCount} {resultCount === 1 ? 'entry' : 'entries'}
+          <p className="text-sm text-right" style={{ color: '#8C807A' }}>
+            <strong style={{ color: '#1A1210' }}>{resultCount}</strong>{' '}
+            {resultCount === 1 ? 'entry' : 'entries'}
           </p>
         </div>
       </div>

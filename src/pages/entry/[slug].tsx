@@ -12,40 +12,73 @@ interface EntryPageProps {
   related: Entry[];
 }
 
-// ── Section block used throughout the detail page ──────────────────────────
+/*
+  Section block — used throughout the detail page for each named content group.
+
+  Design decisions:
+  - Section heading: uppercase tracked label style — subordinate to the term
+  - Flanking rule: ink-200, short (1rem) — typographic detail that breaks the visual monotony
+    of repeated section labels without drawing eye away from content
+*/
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="mb-8">
       <h2
-        className="text-base font-bold uppercase tracking-widest text-gray-400 mb-3 flex items-center gap-2"
+        className="text-xs font-bold uppercase flex items-center gap-2 mb-3"
+        style={{ color: '#B0A49E', letterSpacing: '0.09em' }}
       >
-        <span className="w-4 h-px bg-gray-200" />
+        {/* Short rule bar — a signature detail: gives each section a bookend */}
+        <span
+          className="inline-block flex-shrink-0"
+          style={{ width: '1rem', height: '1px', background: '#D4CCC8' }}
+        />
         {title}
       </h2>
-      <div className="text-gray-700 leading-relaxed">{children}</div>
+      <div style={{ color: '#4A3F3A', lineHeight: '1.7' }}>{children}</div>
     </div>
   );
 }
 
-// ── Semantic drift timeline renderer ──────────────────────────────────────
+/*
+  Semantic drift timeline — visual timeline with coral dots.
+*/
 function SemanticTimeline({ data }: { data: SemanticDriftEntry[] | string }) {
   if (typeof data === 'string') {
-    return <p className="text-gray-700 leading-relaxed">{data}</p>;
+    return <p style={{ color: '#4A3F3A', lineHeight: '1.7' }}>{data}</p>;
   }
   return (
-    <ol className="relative border-l-2 border-gray-100 space-y-4 pl-5">
+    <ol className="relative space-y-4 pl-5" style={{ borderLeft: '2px solid #F2EDEA' }}>
       {data.map((item, i) => (
         <li key={i} className="relative">
-          <span className="absolute -left-[1.4rem] top-1 w-3 h-3 rounded-full bg-brand-coral border-2 border-white shadow" />
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-0.5">{item.period}</p>
-          <p className="text-sm text-gray-700">{item.meaning}</p>
+          {/* Coral dot — the timeline's visual backbone */}
+          <span
+            className="absolute rounded-full"
+            style={{
+              left: '-1.375rem',
+              top: '0.25rem',
+              width: '0.75rem',
+              height: '0.75rem',
+              background: '#F55D35',
+              border: '2px solid #FFFCF9',   /* matches body bg for clean separation */
+              boxShadow: '0 0 0 1px rgba(245, 93, 53, 0.2)',
+            }}
+          />
+          <p
+            className="text-xs font-bold uppercase mb-0.5"
+            style={{ color: '#B0A49E', letterSpacing: '0.08em' }}
+          >
+            {item.period}
+          </p>
+          <p className="text-sm" style={{ color: '#4A3F3A' }}>{item.meaning}</p>
         </li>
       ))}
     </ol>
   );
 }
 
-// ── Copy share button ──────────────────────────────────────────────────────
+/*
+  Copy/share button — inline action.
+*/
 function ShareButton({ url }: { url: string }) {
   const [copied, setCopied] = useState(false);
 
@@ -55,24 +88,33 @@ function ShareButton({ url }: { url: string }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // fallback: select the url
+      // clipboard API not available
     }
   };
 
   return (
     <button
       onClick={handleCopy}
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm
-        border border-gray-200 text-gray-600 hover:border-brand-coral hover:text-brand-coral
-        transition-colors bg-white"
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium border bg-white transition-all duration-150"
+      style={{ borderColor: '#D4CCC8', color: '#4A3F3A' }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.borderColor = '#F55D35';
+        (e.currentTarget as HTMLElement).style.color = '#F55D35';
+        (e.currentTarget as HTMLElement).style.background = '#FFF4EE';
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.borderColor = '#D4CCC8';
+        (e.currentTarget as HTMLElement).style.color = '#4A3F3A';
+        (e.currentTarget as HTMLElement).style.background = 'white';
+      }}
       title="Copy link"
     >
       {copied ? (
         <>
-          <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-4 h-4" style={{ color: '#059669' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
-          Copied!
+          <span style={{ color: '#059669' }}>Copied!</span>
         </>
       ) : (
         <>
@@ -86,7 +128,7 @@ function ShareButton({ url }: { url: string }) {
   );
 }
 
-// ── Main page component ────────────────────────────────────────────────────
+/* ── Main page ─────────────────────────────────────────────────────────── */
 const EntryPage: NextPage<EntryPageProps> = ({ entry, related }) => {
   const pageUrl = typeof window !== 'undefined'
     ? window.location.href
@@ -95,20 +137,37 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related }) => {
   return (
     <>
       <Head>
-        <title>{entry.term} — HolyShirtBalls</title>
+        <title>{entry.term} &mdash; HolyShirtBalls</title>
         <meta name="description" content={entry.shortDescription} />
         <meta property="og:title" content={`${entry.term} — HolyShirtBalls`} />
         <meta property="og:description" content={entry.shortDescription} />
       </Head>
 
       <div className="max-w-4xl mx-auto px-4 py-10">
-        {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-gray-400 mb-8" aria-label="Breadcrumb">
-          <Link href="/" className="hover:text-brand-coral transition-colors">Home</Link>
-          <span>/</span>
-          <Link href="/browse" className="hover:text-brand-coral transition-colors">Browse</Link>
-          <span>/</span>
-          <span className="text-gray-600">{entry.term}</span>
+
+        {/* Breadcrumb — warm muted text, coral hover */}
+        <nav className="flex items-center gap-2 text-sm mb-8" aria-label="Breadcrumb">
+          <Link
+            href="/"
+            className="transition-colors duration-150"
+            style={{ color: '#B0A49E' }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
+          >
+            Home
+          </Link>
+          <span style={{ color: '#D4CCC8' }}>/</span>
+          <Link
+            href="/browse"
+            className="transition-colors duration-150"
+            style={{ color: '#B0A49E' }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
+          >
+            Browse
+          </Link>
+          <span style={{ color: '#D4CCC8' }}>/</span>
+          <span style={{ color: '#4A3F3A' }}>{entry.term}</span>
         </nav>
 
         {/* Entry header */}
@@ -117,38 +176,51 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related }) => {
           <div className="flex flex-wrap items-center gap-2 mb-4">
             <Link
               href={`/browse?franchise=${encodeURIComponent(entry.franchise)}`}
-              className="text-sm font-medium text-gray-500 hover:text-brand-coral transition-colors"
+              className="text-sm font-medium transition-colors duration-150"
+              style={{ color: '#8C807A' }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#8C807A'; }}
             >
               {entry.franchise}
             </Link>
-            <span className="text-gray-300">·</span>
+            <span style={{ color: '#D4CCC8' }}>&middot;</span>
             <Badge label={entry.medium} variant="medium" size="sm" />
             <Badge label={entry.category} variant="category" size="sm" />
             <Badge label={entry.severity} variant="severity" size="sm" />
           </div>
 
-          {/* Term */}
+          {/* Term — the hero display type */}
           <h1
-            className="text-5xl sm:text-7xl font-extrabold text-gray-900 leading-none mb-4"
-            style={{ fontFamily: 'var(--font-display, Georgia, serif)' }}
+            className="font-display font-extrabold leading-none mb-4"
+            style={{
+              fontSize: 'clamp(3rem, 8vw, 5.5rem)',
+              color: '#1A1210',
+              letterSpacing: '-0.03em',
+            }}
           >
             {entry.term}
           </h1>
 
           {/* Pronunciation + POS */}
-          <p className="text-lg text-gray-500 mb-3">
-            <span className="font-mono">/{entry.phoneticPronunciation}/</span>
+          <p className="mb-3" style={{ color: '#8C807A', fontSize: '1.05rem' }}>
+            <span className="font-mono text-base">/{entry.phoneticPronunciation}/</span>
             {' '}
-            <span className="italic text-gray-400">{entry.partOfSpeech}</span>
+            <span className="italic" style={{ color: '#B0A49E', fontSize: '1rem' }}>{entry.partOfSpeech}</span>
           </p>
 
-          {/* English equivalent */}
-          <p className="text-2xl font-semibold text-gray-600 mb-5">
-            ≈ &ldquo;<span className="text-brand-coral">{entry.englishEquivalent}</span>&rdquo;
+          {/* English equivalent — coral accent, editorial register */}
+          <p
+            className="font-semibold mb-5"
+            style={{ fontSize: '1.375rem', color: '#4A3F3A' }}
+          >
+            &#8776; &ldquo;<span style={{ color: '#F55D35' }}>{entry.englishEquivalent}</span>&rdquo;
           </p>
 
-          {/* Short description */}
-          <p className="text-base text-gray-700 leading-relaxed max-w-2xl mb-6 text-lg">
+          {/* Short description — lead paragraph */}
+          <p
+            className="leading-relaxed max-w-2xl mb-6"
+            style={{ fontSize: '1.0625rem', color: '#2D2420' }}
+          >
             {entry.shortDescription}
           </p>
 
@@ -157,11 +229,20 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related }) => {
             <ShareButton url={pageUrl} />
             <Link
               href={`/browse?franchise=${encodeURIComponent(entry.franchise)}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm
-                border border-gray-200 text-gray-600 hover:border-brand-coral hover:text-brand-coral
-                transition-colors bg-white"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-medium border bg-white transition-all duration-150"
+              style={{ borderColor: '#D4CCC8', color: '#4A3F3A' }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = '#F55D35';
+                (e.currentTarget as HTMLElement).style.color = '#F55D35';
+                (e.currentTarget as HTMLElement).style.background = '#FFF4EE';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = '#D4CCC8';
+                (e.currentTarget as HTMLElement).style.color = '#4A3F3A';
+                (e.currentTarget as HTMLElement).style.background = 'white';
+              }}
             >
-              More from {entry.franchise.split(' ').slice(0, 2).join(' ')} →
+              More from {entry.franchise.split(' ').slice(0, 2).join(' ')} &rarr;
             </Link>
           </div>
         </header>
@@ -170,14 +251,23 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related }) => {
           {/* Main content */}
           <div className="lg:col-span-2 space-y-0">
 
-            {/* Example quote */}
+            {/* Example quote — warm tinted blockquote */}
             {entry.exampleQuote?.text && (
-              <div className="mb-8 rounded-2xl bg-orange-50 border-l-4 border-brand-coral px-6 py-5">
-                <blockquote className="text-gray-800 text-lg leading-relaxed italic mb-2">
+              <div
+                className="mb-8 rounded-r-[1.25rem] px-6 py-5"
+                style={{
+                  background: '#FFF4EE',
+                  borderLeft: '3px solid #F55D35',
+                }}
+              >
+                <blockquote
+                  className="leading-relaxed italic mb-2"
+                  style={{ fontSize: '1.0625rem', color: '#2D2420' }}
+                >
                   &ldquo;{entry.exampleQuote.text}&rdquo;
                 </blockquote>
-                <cite className="text-sm text-gray-500 not-italic">
-                  — {entry.exampleQuote.source || entry.notableSpeaker}
+                <cite className="text-sm not-italic" style={{ color: '#8C807A' }}>
+                  &mdash; {entry.exampleQuote.source || entry.notableSpeaker}
                 </cite>
               </div>
             )}
@@ -218,7 +308,12 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related }) => {
                   {entry.realWorldEuphemisms.map((e) => (
                     <span
                       key={e}
-                      className="px-3 py-1 rounded-full bg-gray-100 text-sm text-gray-600 border border-gray-200"
+                      className="px-3 py-1 rounded-full text-sm"
+                      style={{
+                        background: '#F5EFEB',
+                        color: '#4A3F3A',
+                        border: '1px solid #E8E2DE',
+                      }}
                     >
                       {e}
                     </span>
@@ -230,9 +325,17 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related }) => {
 
           {/* Sidebar */}
           <aside className="space-y-8">
-            {/* Quick facts */}
-            <div className="rounded-2xl bg-gray-50 border border-gray-100 p-5">
-              <h2 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4">Quick Facts</h2>
+            {/* Quick facts panel */}
+            <div
+              className="rounded-[1.25rem] p-5"
+              style={{ background: '#F5EFEB', border: '1px solid #F2EDEA' }}
+            >
+              <h2
+                className="text-xs font-bold uppercase mb-4"
+                style={{ color: '#B0A49E', letterSpacing: '0.09em' }}
+              >
+                Quick Facts
+              </h2>
               <dl className="space-y-3">
                 {[
                   { label: 'Notable Speaker', value: entry.notableSpeaker },
@@ -243,17 +346,25 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related }) => {
                 ].map(({ label, value }) =>
                   value ? (
                     <div key={label}>
-                      <dt className="text-xs font-semibold text-gray-400">{label}</dt>
-                      <dd className="text-sm text-gray-700 mt-0.5">{value}</dd>
+                      <dt className="text-xs font-semibold" style={{ color: '#B0A49E' }}>{label}</dt>
+                      <dd className="text-sm mt-0.5" style={{ color: '#2D2420' }}>{value}</dd>
                     </div>
                   ) : null
                 )}
               </dl>
             </div>
 
-            {/* Badges summary */}
-            <div className="rounded-2xl bg-white border border-gray-100 p-5">
-              <h2 className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4">Classification</h2>
+            {/* Classification panel */}
+            <div
+              className="rounded-[1.25rem] p-5"
+              style={{ background: 'white', border: '1px solid #F2EDEA' }}
+            >
+              <h2
+                className="text-xs font-bold uppercase mb-4"
+                style={{ color: '#B0A49E', letterSpacing: '0.09em' }}
+              >
+                Classification
+              </h2>
               <div className="flex flex-wrap gap-2">
                 <Badge label={entry.severity} variant="severity" size="md" />
                 <Badge label={entry.category} variant="category" size="md" />
@@ -264,13 +375,16 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related }) => {
             {/* Related entries */}
             {related.length > 0 && <RelatedEntries entries={related} />}
 
-            {/* Browse link */}
+            {/* Back to browse */}
             <div className="text-center">
               <Link
                 href="/browse"
-                className="text-sm text-brand-coral hover:underline"
+                className="text-sm font-medium transition-colors duration-150"
+                style={{ color: '#F55D35' }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
               >
-                ← Back to Browse
+                &larr; Back to Browse
               </Link>
             </div>
           </aside>

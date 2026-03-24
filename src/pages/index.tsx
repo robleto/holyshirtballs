@@ -25,7 +25,7 @@ const Home: NextPage<HomeProps> = ({
   return (
     <>
       <Head>
-        <title>HolyShirtBalls — The Fictional Profanity Dictionary</title>
+        <title>HolyShirtBalls &mdash; The Fictional Profanity Dictionary</title>
         <meta
           name="description"
           content={`${entryCount} made-up swear words, curses, insults, and taboo expressions from ${franchiseCount} franchises. The internet's most studied archive of fictional profanity.`}
@@ -34,6 +34,11 @@ const Home: NextPage<HomeProps> = ({
 
       <Hero entryCount={entryCount} franchiseCount={franchiseCount} />
 
+      {/*
+        Homepage content sections.
+        Section dividers use section-divider utility (ink-100 border) — warmer than border-gray-100.
+        FeaturedSection titles are now consistently ink-900 (not varying Tailwind accent classes).
+      */}
       <div className="max-w-6xl mx-auto px-4">
         <FeaturedSection
           title="Most Iconic"
@@ -41,10 +46,9 @@ const Home: NextPage<HomeProps> = ({
           entries={mostIconic}
           browseLink="/browse"
           browseLinkLabel="Browse all entries"
-          accent="text-brand-coral"
         />
 
-        <div className="border-t border-gray-100" />
+        <div className="section-divider" />
 
         <FeaturedSection
           title="Mildest of the Mild"
@@ -52,10 +56,9 @@ const Home: NextPage<HomeProps> = ({
           entries={mildest}
           browseLink="/browse?severity=Mild"
           browseLinkLabel="See all mild entries"
-          accent="text-emerald-600"
         />
 
-        <div className="border-t border-gray-100" />
+        <div className="section-divider" />
 
         <FeaturedSection
           title="Most Inventive"
@@ -63,36 +66,46 @@ const Home: NextPage<HomeProps> = ({
           entries={mostInventive}
           browseLink="/browse"
           browseLinkLabel="Explore the archive"
-          accent="text-brand-purple"
         />
 
-        <div className="border-t border-gray-100" />
+        <div className="section-divider" />
 
         <FeaturedSection
-          title="From Sci-Fi & Fantasy"
+          title="From Sci-Fi &amp; Fantasy"
           subtitle="Where creativity in profanity reaches its highest density."
           entries={fromSciFi}
           browseLink="/browse?medium=TV"
           browseLinkLabel="Browse TV entries"
-          accent="text-blue-600"
         />
 
-        {/* CTA banner */}
-        <section className="my-16 rounded-3xl bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100 p-8 sm:p-12 text-center">
+        {/*
+          CTA banner — warm cream surface, coral CTA button.
+          Rounded-3xl matches the larger radius used for prominent container blocks.
+          Border is coral-alpha (not orange-100) for consistency with the token system.
+        */}
+        <section
+          className="my-16 rounded-3xl p-8 sm:p-12 text-center"
+          style={{
+            background: 'linear-gradient(135deg, #FFF4EE 0%, #FFF8F4 100%)',
+            border: '1px solid rgba(245, 93, 53, 0.15)',
+          }}
+        >
           <h2
-            className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3"
-            style={{ fontFamily: 'var(--font-display, Georgia, serif)' }}
+            className="font-display font-bold text-2xl sm:text-3xl mb-3"
+            style={{ color: '#1A1210', letterSpacing: '-0.015em' }}
           >
             Know a fictional swear we&rsquo;re missing?
           </h2>
-          <p className="text-gray-600 mb-6 max-w-lg mx-auto">
+          <p className="mb-6 max-w-lg mx-auto text-sm leading-relaxed" style={{ color: '#6B5E58' }}>
             The archive grows through community contributions. If you&rsquo;ve spotted a fictional expletive
             not yet catalogued here, we want to hear from you.
           </p>
           <a
             href="/contribute"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-brand-coral text-white font-semibold rounded-xl
-              hover:bg-orange-600 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl text-white text-sm font-semibold transition-colors duration-150"
+            style={{ background: '#F55D35' }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#D94A22'; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = '#F55D35'; }}
           >
             Contribute an Entry
           </a>
@@ -110,10 +123,10 @@ export const getStaticProps: GetStaticProps<HomeProps> = () => {
     props: {
       entryCount: allEntries.length,
       franchiseCount,
-      mostIconic: sections.mostIconic,
-      mildest: sections.mildest,
+      mostIconic:    sections.mostIconic,
+      mildest:       sections.mildest,
       mostInventive: sections.mostInventive,
-      fromSciFi: sections.fromSciFi,
+      fromSciFi:     sections.fromSciFi,
     },
   };
 };

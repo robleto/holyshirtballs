@@ -37,10 +37,10 @@ function filtersFromQuery(query: Record<string, string | string[] | undefined>):
 
 function filtersToQuery(filters: BrowseFilters): Record<string, string> {
   const q: Record<string, string> = {};
-  if (filters.search)   q.search   = filters.search;
-  if (filters.medium)   q.medium   = filters.medium;
-  if (filters.category) q.category = filters.category;
-  if (filters.severity) q.severity = filters.severity;
+  if (filters.search)    q.search    = filters.search;
+  if (filters.medium)    q.medium    = filters.medium;
+  if (filters.category)  q.category  = filters.category;
+  if (filters.severity)  q.severity  = filters.severity;
   if (filters.franchise) q.franchise = filters.franchise;
   if (filters.sort && filters.sort !== 'alpha') q.sort = filters.sort;
   return q;
@@ -51,7 +51,6 @@ const Browse: NextPage<BrowseProps> = ({ allEntries: entries, franchises }) => {
   const [filters, setFilters] = useState<BrowseFilters>(defaultFilters);
   const [ready, setReady] = useState(false);
 
-  // Sync filters from URL on mount & query change
   useEffect(() => {
     if (!router.isReady) return;
     setFilters(filtersFromQuery(router.query));
@@ -78,20 +77,25 @@ const Browse: NextPage<BrowseProps> = ({ allEntries: entries, franchises }) => {
   return (
     <>
       <Head>
-        <title>Browse — HolyShirtBalls</title>
-        <meta name="description" content={`Browse ${entries.length} fictional profanity entries. Filter by franchise, medium, category, and severity.`} />
+        <title>Browse &mdash; HolyShirtBalls</title>
+        <meta
+          name="description"
+          content={`Browse ${entries.length} fictional profanity entries. Filter by franchise, medium, category, and severity.`}
+        />
       </Head>
 
       <div className="max-w-6xl mx-auto px-4 py-10">
         {/* Page header */}
         <div className="mb-8">
+          {/* Eyebrow */}
+          <p className="eyebrow mb-2">The Archive</p>
           <h1
-            className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2"
-            style={{ fontFamily: 'var(--font-display, Georgia, serif)' }}
+            className="font-display font-bold text-3xl sm:text-4xl mb-2"
+            style={{ color: '#1A1210', letterSpacing: '-0.02em' }}
           >
             Browse the Archive
           </h1>
-          <p className="text-gray-500">
+          <p className="text-sm" style={{ color: '#8C807A' }}>
             {entries.length} entries across {franchises.length} franchises. Filter, search, and discover.
           </p>
         </div>

@@ -8,6 +8,20 @@ interface HeroProps {
   franchiseCount: number;
 }
 
+/*
+  Hero section — the site's signature moment.
+
+  Design decisions:
+  - Background: warm cream gradient (cream -> parchment) instead of orange-50 -> white.
+    This connects smoothly to the body background (parchment), preventing the hard edge
+    that occurred when a bright orange gradient met a pure-white body.
+  - Background glyphs: coral at lower opacity (not orange-100/amber-100 which read as pale blobs)
+  - Eyebrow: uses the `eyebrow` utility class with flanking rule bars
+  - Title: letter-spacing tightened for display size; "Balls" span carries the coral
+  - Stats: ink-500 muted text; strong values in ink-800 (not gray-700)
+  - Quick filter pills: outline style matching the Button outline variant
+  - "Browse All" pill: solid coral — intentional hierarchy, not an outlier
+*/
 export default function Hero({ entryCount, franchiseCount }: HeroProps) {
   const router = useRouter();
   const [search, setSearch] = useState('');
@@ -21,44 +35,79 @@ export default function Hero({ entryCount, franchiseCount }: HeroProps) {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-white border-b border-orange-100">
-      {/* Background decoration */}
+    <section
+      className="relative overflow-hidden border-b"
+      style={{
+        background: 'linear-gradient(160deg, #FFF8F4 0%, #FFF4EE 45%, #FFFCF9 100%)',
+        borderBottomColor: '#F2EDEA',
+      }}
+    >
+      {/* Background glyph decoration — coral at 8% opacity, rotated for energy */}
       <div className="absolute inset-0 pointer-events-none select-none overflow-hidden" aria-hidden>
-        <span className="absolute -top-4 -left-4 text-[12rem] font-bold text-orange-100 rotate-[-12deg] leading-none">
+        {/* Top-left large glyph */}
+        <span
+          className="absolute -top-6 -left-6 font-display font-extrabold leading-none"
+          style={{
+            fontSize: '14rem',
+            color: 'rgba(245, 93, 53, 0.06)',
+            transform: 'rotate(-14deg)',
+            userSelect: 'none',
+          }}
+        >
           @#$!
         </span>
-        <span className="absolute -bottom-6 -right-4 text-[8rem] font-bold text-amber-100 rotate-[8deg] leading-none">
+        {/* Bottom-right smaller glyph */}
+        <span
+          className="absolute -bottom-8 -right-4 font-display font-extrabold leading-none"
+          style={{
+            fontSize: '9rem',
+            color: 'rgba(245, 93, 53, 0.05)',
+            transform: 'rotate(10deg)',
+            userSelect: 'none',
+          }}
+        >
           *!@%
         </span>
       </div>
 
       <div className="relative max-w-5xl mx-auto px-4 py-20 sm:py-28 text-center">
-        {/* Eyebrow */}
-        <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-coral mb-4">
-          <span className="w-6 h-px bg-brand-coral" />
+
+        {/* Eyebrow label */}
+        <p className="eyebrow mb-5">
+          <span className="w-8 h-px bg-current opacity-60" />
           A Fictional Profanity Dictionary
-          <span className="w-6 h-px bg-brand-coral" />
+          <span className="w-8 h-px bg-current opacity-60" />
         </p>
 
-        {/* Title */}
+        {/* Site title — display hierarchy */}
         <h1
-          className="text-5xl sm:text-7xl font-extrabold text-gray-900 mb-5 leading-none tracking-tight"
-          style={{ fontFamily: 'var(--font-display, Georgia, serif)' }}
+          className="font-display font-extrabold text-[#1A1210] mb-5 leading-none"
+          style={{
+            fontSize: 'clamp(3rem, 8vw, 5.5rem)',
+            letterSpacing: '-0.03em',
+          }}
         >
           Holy Shirt
-          <span className="text-brand-coral">Balls</span>
+          <span style={{ color: '#F55D35' }}>Balls</span>
         </h1>
 
         {/* Subtitle */}
-        <p className="max-w-2xl mx-auto text-lg sm:text-xl text-gray-600 leading-relaxed mb-3">
+        <p
+          className="max-w-2xl mx-auto leading-relaxed mb-3"
+          style={{
+            fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
+            color: '#4A3F3A',
+          }}
+        >
           The internet&rsquo;s most comprehensive archive of made-up swear words, curses, insults,
-          and taboo expressions — from every corner of film, TV, books, comics, and games.
+          and taboo expressions &mdash; from every corner of film, TV, books, comics, and games.
         </p>
 
-        {/* Stats */}
-        <p className="text-sm text-gray-400 mb-10">
-          <strong className="text-gray-700">{entryCount}</strong> entries across{' '}
-          <strong className="text-gray-700">{franchiseCount}</strong> franchises. All completely fake. All deeply studied.
+        {/* Stats — subdued, precise */}
+        <p className="text-sm mb-10" style={{ color: '#8C807A' }}>
+          <strong style={{ color: '#1A1210', fontWeight: 700 }}>{entryCount}</strong> entries across{' '}
+          <strong style={{ color: '#1A1210', fontWeight: 700 }}>{franchiseCount}</strong> franchises.{' '}
+          All completely fake. All deeply studied.
         </p>
 
         {/* Search */}
@@ -67,29 +116,49 @@ export default function Hero({ entryCount, franchiseCount }: HeroProps) {
             value={search}
             onChange={setSearch}
             onSubmit={handleSearch}
-            placeholder='Try "frak", "Good Place", or "Huttese"…'
+            placeholder='Try "frak", "Good Place", or "Huttese"\u2026'
             autoFocus={false}
           />
         </div>
 
-        {/* Quick filters */}
+        {/* Quick filter pills — outline + one solid primary */}
         <div className="flex flex-wrap justify-center gap-2">
           {['TV', 'Film', 'Comic', 'Book', 'Game', 'Animation'].map((medium) => (
             <Link
               key={medium}
               href={`/browse?medium=${medium}`}
-              className="px-3 py-1.5 text-sm rounded-full bg-white border border-gray-200 text-gray-600
-                hover:border-brand-coral hover:text-brand-coral transition-colors shadow-sm"
+              className="px-3.5 py-1.5 text-sm font-semibold rounded-full bg-white transition-all duration-150"
+              style={{
+                border: '1px solid #D4CCC8',
+                color: '#4A3F3A',
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = '#F55D35';
+                (e.currentTarget as HTMLElement).style.color = '#F55D35';
+                (e.currentTarget as HTMLElement).style.background = '#FFF4EE';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = '#D4CCC8';
+                (e.currentTarget as HTMLElement).style.color = '#4A3F3A';
+                (e.currentTarget as HTMLElement).style.background = 'white';
+              }}
             >
               {medium}
             </Link>
           ))}
+          {/* Primary CTA pill — solid coral */}
           <Link
             href="/browse"
-            className="px-3 py-1.5 text-sm rounded-full bg-brand-coral text-white
-              hover:bg-orange-600 transition-colors shadow-sm"
+            className="px-3.5 py-1.5 text-sm font-semibold rounded-full text-white transition-colors duration-150"
+            style={{ background: '#F55D35' }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.background = '#D94A22';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.background = '#F55D35';
+            }}
           >
-            Browse All →
+            Browse All &rarr;
           </Link>
         </div>
       </div>

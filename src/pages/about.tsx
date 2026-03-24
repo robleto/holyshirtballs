@@ -6,29 +6,32 @@ const About: NextPage = () => {
   return (
     <>
       <Head>
-        <title>About — HolyShirtBalls</title>
+        <title>About &mdash; HolyShirtBalls</title>
         <meta name="description" content="About HolyShirtBalls — the internet's most comprehensive archive of fictional profanity." />
       </Head>
 
       <div className="max-w-3xl mx-auto px-4 py-16">
-        {/* Header */}
+
+        {/* Page header */}
         <div className="mb-12">
-          <p className="text-xs font-bold uppercase tracking-widest text-brand-coral mb-3">About the Project</p>
+          {/* Coral eyebrow */}
+          <p className="eyebrow mb-3">About the Project</p>
+
           <h1
-            className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-5 leading-tight"
-            style={{ fontFamily: 'var(--font-display, Georgia, serif)' }}
+            className="font-display font-extrabold text-4xl sm:text-5xl mb-5 leading-tight"
+            style={{ color: '#1A1210', letterSpacing: '-0.025em' }}
           >
             Why study fictional profanity?
           </h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
+          <p className="text-xl leading-relaxed" style={{ color: '#4A3F3A' }}>
             Because the words a fictional world invents to swear by tell you everything about that world.
           </p>
         </div>
 
         {/* Body content */}
-        <div className="prose-entry space-y-6 text-gray-700 leading-relaxed">
+        <div className="prose-entry space-y-6">
           <p>
-            <strong>HolyShirtBalls</strong> is an open archive and reference site for fictional profanity —
+            <strong style={{ color: '#1A1210' }}>HolyShirtBalls</strong> is an open archive and reference site for fictional profanity &mdash;
             the made-up swear words, curses, insults, euphemisms, and taboo expressions invented by writers,
             game designers, and screenwriters to give their invented worlds authentic emotional texture.
           </p>
@@ -45,7 +48,7 @@ const About: NextPage = () => {
           <p>
             Profanity is one of the most socially loaded and linguistically revealing features of any language.
             The words a culture forbids or contextualizes as taboo reveal its deepest values, fears, and social
-            hierarchies. When a worldbuilder invents fictional profanity, they&rsquo;re doing the same work —
+            hierarchies. When a worldbuilder invents fictional profanity, they&rsquo;re doing the same work &mdash;
             but with the benefit of intentional design.
           </p>
 
@@ -54,7 +57,7 @@ const About: NextPage = () => {
             as ours. <em>Belgium</em>&rsquo;s fictional extreme taboo (from Hitchhiker&rsquo;s Guide) is
             a philosophical joke about the arbitrariness of all taboo. Belter Creole&rsquo;s vocabulary in
             The Expanse embeds centuries of political oppression into its phonology. These aren&rsquo;t incidental
-            details — they&rsquo;re the craft of building believable worlds.
+            details &mdash; they&rsquo;re the craft of building believable worlds.
           </p>
 
           <h2>The archive</h2>
@@ -67,17 +70,23 @@ const About: NextPage = () => {
 
           <p>
             The archive currently covers{' '}
-            <Link href="/browse" className="text-brand-coral hover:underline">
+            <Link
+              href="/browse"
+              className="transition-colors duration-150"
+              style={{ color: '#F55D35' }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
+            >
               entries from dozens of franchises
             </Link>{' '}
-            across TV, film, books, comics, games, and animation. It grows through community contributions —
+            across TV, film, books, comics, games, and animation. It grows through community contributions &mdash;
             every entry can be proposed, refined, and fact-checked through pull requests on GitHub.
           </p>
 
           <h2>The name</h2>
 
           <p>
-            &ldquo;HolyShirtBalls&rdquo; is itself a fictional profanity — Eleanor Shellstrop&rsquo;s compound
+            &ldquo;HolyShirtBalls&rdquo; is itself a fictional profanity &mdash; Eleanor Shellstrop&rsquo;s compound
             expletive from The Good Place, where the afterlife&rsquo;s mystical architecture prevents the
             articulation of actual swear words. It felt like the right name for an archive that studies
             exactly this kind of creative linguistic invention.
@@ -88,8 +97,14 @@ const About: NextPage = () => {
           <p>
             The archive is open source and community-maintained. If you know a fictional expletive not yet
             in the archive, we want to hear from you.{' '}
-            <Link href="/contribute" className="text-brand-coral hover:underline">
-              See the contribution guide →
+            <Link
+              href="/contribute"
+              className="transition-colors duration-150"
+              style={{ color: '#F55D35' }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
+            >
+              See the contribution guide &rarr;
             </Link>
           </p>
         </div>
