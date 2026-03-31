@@ -5869,5 +5869,75 @@
       "Dummy",
       "Moron"
     ]
+  },
+  {
+    "id": "172",
+    "slug": "kalads-phantoms",
+    "term": "Kalad's Phantoms!",
+    "englishEquivalent": "Jesus Christ! / Holy shit! (oath of shock)",
+    "phoneticPronunciation": "KAL-adz FAN-tumz",
+    "partOfSpeech": "interjection",
+    "franchise": "Warbreaker (Cosmere)",
+    "medium": "Book",
+    "category": "Oath",
+    "severity": "Extreme",
+    "notableSpeaker": "Vasher; Bebid; various Hallandren characters",
+    "firstAppearance": "Warbreaker by Brandon Sanderson (2009)",
+    "shortDescription": "An oath invoking Kalad the Usurper's legendary Lifeless army — the Phantoms. Kalad created thousands of stone-encased Lifeless soldiers that nearly destroyed civilization during the Manywar. Invoking his Phantoms is invoking the most terrifying military force in Nalthian history.",
+    "etymologyNarrative": "Kalad the Usurper raised an army of Lifeless (reanimated corpses powered by BioChromatic Breath) encased in stone, making them nearly indestructible. The Phantoms became legend — a boogeyman story of unstoppable destruction. Swearing by them invokes that existential dread.",
+    "semanticDriftTimeline": "Gains a dramatic irony layer as the novel progresses and the truth about Kalad's identity is revealed. Every casual use of 'Kalad's Phantoms!' retroactively becomes more loaded once you know who Kalad really is.",
+    "usageHistoryNarrative": "Warbreaker (2009).",
+    "tabooTrajectoryNarrative": "The strongest oath in Warbreaker's vocabulary. Invoking Colors is mild blasphemy; invoking Kalad's Phantoms is invoking apocalyptic military horror. It's the difference between saying 'Oh God' and 'Nuclear hellfire.'",
+    "regionalNotes": "Used across Hallandren and T'Telir. Both Hallandren citizens and Idrian exiles recognize the reference.",
+    "exampleQuote": {
+      "text": "Kalad's Phantoms, man! This could easily spin into another Manywar.",
+      "source": "Warbreaker by Brandon Sanderson (2009)"
+    },
+    "relatedWords": [
+      "Lord of Colors!",
+      "Colors!",
+      "Lord Ruler"
+    ],
+    "realWorldEuphemisms": [
+      "Jesus Christ",
+      "Holy shit",
+      "God almighty",
+      "Good lord"
+    ]
+  },
+  {
+    "id": "173",
+    "slug": "lord-of-colors",
+    "term": "Lord of Colors!",
+    "englishEquivalent": "Oh God! / Good Lord! (strong oath)",
+    "phoneticPronunciation": "LORD uv KUL-erz",
+    "partOfSpeech": "interjection",
+    "franchise": "Warbreaker (Cosmere)",
+    "medium": "Book",
+    "category": "Oath",
+    "severity": "Moderate",
+    "notableSpeaker": "Various Hallandren characters",
+    "firstAppearance": "Warbreaker by Brandon Sanderson (2009)",
+    "shortDescription": "A stronger form of the 'Colors!' oath, elevating it by invoking a divine personification — the Lord of Colors. In Chapter 38, Lightsong actually lampoons this convention, asking why the Returned gods swear by colors rather than by their own names. His conclusion: they should just swear by 'You!'",
+    "etymologyNarrative": "Combines the sacred concept of colors (tied to BioChromatic magic and divine power) with the reverential 'Lord' title. Escalates 'Colors!' the same way 'Lord God!' escalates 'God!' — adding a layer of formal reverence to casual blasphemy.",
+    "semanticDriftTimeline": "Stable within Warbreaker. Part of a tiered oath system: 'Colors!' (mild) → 'Lord of Colors!' (moderate) → 'Kalad's Phantoms!' (extreme).",
+    "usageHistoryNarrative": "Warbreaker (2009).",
+    "tabooTrajectoryNarrative": "The middle tier of Warbreaker's three-level oath system. Sanderson builds these tiers into every Cosmere world — Stormlight has storms/Kelek's breath/Almighty, Mistborn has Harmony/Rust and Ruin/Lord Ruler. The tiering makes the profanity feel like a real linguistic system rather than a single substitute word.",
+    "regionalNotes": "Used primarily in Hallandren. Idrians who worship Austre would use different oaths.",
+    "exampleQuote": {
+      "text": "Lord of Colors! What happened to the court?",
+      "source": "Warbreaker by Brandon Sanderson (2009)"
+    },
+    "relatedWords": [
+      "Kalad's Phantoms!",
+      "Colors!",
+      "Lord Ruler"
+    ],
+    "realWorldEuphemisms": [
+      "Oh Lord",
+      "Good God",
+      "Christ almighty",
+      "Heaven above"
+    ]
   }
 ]
