@@ -6,7 +6,7 @@ import FeaturedSection from '@/components/FeaturedSection';
 import TaxCard, { MEDIUM_DESC, CATEGORY_DESC, SEVERITY_DESC } from '@/components/TaxCard';
 import type { Entry } from '@/types/entry';
 import {
-  allEntries, getFeaturedSections, getAllFranchises,
+  allEntries, getFeaturedSections, getAllFranchises, getAllSlugs,
   MEDIUMS, CATEGORIES, SEVERITIES,
   getEntriesByMedium, getEntriesByCategory, getEntriesBySeverity,
 } from '@/lib/entries';
@@ -16,6 +16,7 @@ interface TaxItem { name: string; count: number; }
 interface HomeProps {
   entryCount: number;
   franchiseCount: number;
+  slugs: string[];
   mostIconic: Entry[];
   mildest: Entry[];
   mostInventive: Entry[];
@@ -28,6 +29,7 @@ interface HomeProps {
 const Home: NextPage<HomeProps> = ({
   entryCount,
   franchiseCount,
+  slugs,
   mostIconic,
   mildest,
   mostInventive,
@@ -46,7 +48,7 @@ const Home: NextPage<HomeProps> = ({
         />
       </Head>
 
-      <Hero entryCount={entryCount} franchiseCount={franchiseCount} />
+      <Hero entryCount={entryCount} franchiseCount={franchiseCount} slugs={slugs} />
 
       {/*
         Homepage content sections.
@@ -105,58 +107,75 @@ const Home: NextPage<HomeProps> = ({
           }}
         >
           <h2
-            className="font-display font-bold text-2xl sm:text-3xl mb-3"
-            style={{ color: '#1A1210', letterSpacing: '-0.015em' }}
+            className="font-display font-bold text-2xl sm:text-3xl mb-3 text-ink-900"
+            style={{ letterSpacing: '-0.015em' }}
           >
             Know a fictional swear we&rsquo;re missing?
           </h2>
-          <p className="mb-6 max-w-lg mx-auto text-sm leading-relaxed" style={{ color: '#6B5E58' }}>
+          <p className="mb-6 max-w-lg mx-auto text-sm leading-relaxed text-ink-600">
             The archive grows one entry at a time. If you&rsquo;ve spotted a fictional expletive that isn&rsquo;t here yet, add it.
           </p>
-          <a
+          <Link
             href="/contribute"
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl text-white text-sm font-semibold transition-colors duration-150"
-            style={{ background: '#F55D35' }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#D94A22'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = '#F55D35'; }}
+            className="inline-flex items-center gap-2 px-7 py-3 rounded-xl text-white text-sm font-semibold bg-brand-coral hover:bg-brand-coral-hover transition-colors duration-150"
           >
             Add to the Archive
-          </a>
+          </Link>
         </section>
 
         {/* Taxonomy browse sections */}
         <div className="section-divider" />
 
-        {(['medium', 'category', 'severity'] as const).map((type) => {
-          const items = type === 'medium' ? mediums : type === 'category' ? categories : severities;
-          const descs = type === 'medium' ? MEDIUM_DESC : type === 'category' ? CATEGORY_DESC : SEVERITY_DESC;
-          const title = type === 'medium' ? 'Browse by Medium' : type === 'category' ? 'Browse by Category' : 'Browse by Severity';
-          const href  = `/${type}`;
-          const cols  = type === 'severity' ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-2 lg:grid-cols-3';
-          return (
-            <section key={type} className="mb-12">
-              <div className="flex items-baseline justify-between mb-5">
-                <h2 className="font-display font-extrabold text-2xl" style={{ color: '#1A1210', letterSpacing: '-0.01em' }}>
-                  {title}
-                </h2>
-                <Link
-                  href={href}
-                  className="text-sm font-medium transition-colors duration-150"
-                  style={{ color: '#B0A49E' }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
-                >
-                  See all &rarr;
-                </Link>
-              </div>
-              <div className={`grid grid-cols-1 sm:${cols} gap-4`}>
-                {items.map(({ name, count }) => (
-                  <TaxCard key={name} type={type} href={`/${type}/${name.toLowerCase()}`} name={name} description={descs[name] ?? ''} count={count} />
-                ))}
-              </div>
-            </section>
-          );
-        })}
+        {/* Browse by Medium — white surface, 3-col grid */}
+        <section className="mb-12">
+          <div className="flex items-baseline justify-between mb-5">
+            <h2 className="font-display font-extrabold text-2xl text-ink-900" style={{ letterSpacing: '-0.01em' }}>
+              Browse by Medium
+            </h2>
+            <Link href="/medium" className="text-sm font-medium text-ink-400 hover:text-brand-coral transition-colors duration-150">
+              See all &rarr;
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {mediums.map(({ name, count }) => (
+              <TaxCard key={name} type="medium" href={`/medium/${name.toLowerCase()}`} name={name} description={MEDIUM_DESC[name] ?? ''} count={count} />
+            ))}
+          </div>
+        </section>
+
+        {/* Browse by Category — muted surface band to break the rhythm */}
+        <section className="-mx-4 px-4 py-10 mb-12 bg-[#F5EFEB] rounded-3xl">
+          <div className="flex items-baseline justify-between mb-5">
+            <h2 className="font-display font-extrabold text-2xl text-ink-900" style={{ letterSpacing: '-0.01em' }}>
+              Browse by Category
+            </h2>
+            <Link href="/category" className="text-sm font-medium text-ink-400 hover:text-brand-coral transition-colors duration-150">
+              See all &rarr;
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {categories.map(({ name, count }) => (
+              <TaxCard key={name} type="category" href={`/category/${name.toLowerCase()}`} name={name} description={CATEGORY_DESC[name] ?? ''} count={count} />
+            ))}
+          </div>
+        </section>
+
+        {/* Browse by Severity — white surface, 4-col grid (distinct from above two) */}
+        <section className="mb-12">
+          <div className="flex items-baseline justify-between mb-5">
+            <h2 className="font-display font-extrabold text-2xl text-ink-900" style={{ letterSpacing: '-0.01em' }}>
+              Browse by Severity
+            </h2>
+            <Link href="/severity" className="text-sm font-medium text-ink-400 hover:text-brand-coral transition-colors duration-150">
+              See all &rarr;
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {severities.map(({ name, count }) => (
+              <TaxCard key={name} type="severity" href={`/severity/${name.toLowerCase()}`} name={name} description={SEVERITY_DESC[name] ?? ''} count={count} />
+            ))}
+          </div>
+        </section>
       </div>
     </>
   );
@@ -170,6 +189,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = () => {
     props: {
       entryCount:    allEntries.length,
       franchiseCount,
+      slugs:         getAllSlugs(),
       mostIconic:    sections.mostIconic,
       mildest:       sections.mildest,
       mostInventive: sections.mostInventive,

@@ -19,7 +19,7 @@ import SearchBar from '@/components/SearchBar';
 import FilterBar from '@/components/FilterBar';
 import EntryCard from '@/components/EntryCard';
 import EmptyState from '@/components/EmptyState';
-import TaxCard, { MEDIUM_DESC, CATEGORY_DESC, SEVERITY_DESC, CATEGORY_COLORS, SEVERITY_COLORS } from '@/components/TaxCard';
+import TaxCard, { MEDIUM_DESC, CATEGORY_DESC, SEVERITY_DESC } from '@/components/TaxCard';
 
 interface TaxonomyItem { name: string; count: number; }
 
@@ -73,15 +73,12 @@ function TaxonomySection({ title, href, children }: { title: string; href: strin
   return (
     <section className="mb-12">
       <div className="flex items-baseline justify-between mb-5">
-        <h2 className="font-display font-extrabold text-2xl" style={{ color: '#1A1210', letterSpacing: '-0.01em' }}>
+        <h2 className="font-display font-extrabold text-2xl text-ink-900" style={{ letterSpacing: '-0.01em' }}>
           {title}
         </h2>
         <Link
           href={href}
-          className="text-sm font-medium transition-colors duration-150"
-          style={{ color: '#B0A49E' }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
+          className="text-sm font-medium text-ink-400 hover:text-brand-coral transition-colors duration-150"
         >
           See all &rarr;
         </Link>
@@ -141,34 +138,37 @@ const Browse: NextPage<BrowseProps> = ({ allEntries: entries, franchises, medium
         <div className="mb-8">
           <p className="eyebrow mb-2">The Archive</p>
           <h1
-            className="font-display font-bold text-3xl sm:text-4xl mb-2"
-            style={{ color: '#1A1210', letterSpacing: '-0.02em' }}
+            className="font-display font-bold text-3xl sm:text-4xl mb-2 text-ink-900"
+            style={{ letterSpacing: '-0.02em' }}
           >
             Browse the Archive
           </h1>
-          <p className="text-sm" style={{ color: '#8C807A' }}>
+          <p className="text-sm text-ink-500">
             {entries.length} entries across {franchises.length} franchises.
           </p>
         </div>
 
         {/* View toggle tabs */}
-        <div
-          className="inline-flex rounded-xl p-1 mb-8"
-          style={{ background: '#F2EDEA' }}
-          role="tablist"
-        >
+        <div className="inline-flex rounded-xl p-1 mb-8 bg-ink-100" role="tablist" aria-label="Browse views">
           {(['explore', 'search'] as const).map((v) => (
             <button
               key={v}
+              id={`tab-${v}`}
               role="tab"
               aria-selected={view === v}
+              aria-controls={`panel-${v}`}
+              tabIndex={view === v ? 0 : -1}
               onClick={() => setView(v)}
-              className="px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-150"
-              style={
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowRight') setView('search');
+                if (e.key === 'ArrowLeft')  setView('explore');
+              }}
+              className={[
+                'px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-150',
                 view === v
-                  ? { background: 'white', color: '#1A1210', boxShadow: '0 1px 3px rgba(26,18,16,0.10)' }
-                  : { background: 'transparent', color: '#8C807A' }
-              }
+                  ? 'bg-white text-ink-900 shadow-[0_1px_3px_rgba(26,18,16,0.10)]'
+                  : 'bg-transparent text-ink-500',
+              ].join(' ')}
             >
               {v === 'explore' ? 'Explore' : 'Search & Filter'}
             </button>
@@ -177,7 +177,7 @@ const Browse: NextPage<BrowseProps> = ({ allEntries: entries, franchises, medium
 
         {/* ── Explore view ── */}
         {view === 'explore' && (
-          <>
+          <div id="panel-explore" role="tabpanel" aria-labelledby="tab-explore">
             <TaxonomySection title="By Medium" href="/medium">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {mediums.map(({ name, count }) => (
@@ -201,12 +201,12 @@ const Browse: NextPage<BrowseProps> = ({ allEntries: entries, franchises, medium
                 ))}
               </div>
             </TaxonomySection>
-          </>
+          </div>
         )}
 
         {/* ── Search & Filter view ── */}
         {view === 'search' && (
-          <>
+          <div id="panel-search" role="tabpanel" aria-labelledby="tab-search">
             <div className="mb-4">
               <SearchBar
                 value={filters.search}
@@ -233,7 +233,7 @@ const Browse: NextPage<BrowseProps> = ({ allEntries: entries, franchises, medium
             ) : (
               <EmptyState search={filters.search} onClear={clearAll} />
             )}
-          </>
+          </div>
         )}
       </div>
     </>

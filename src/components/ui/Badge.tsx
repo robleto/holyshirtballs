@@ -32,14 +32,14 @@ interface BadgeProps {
 */
 
 const severityColors: Record<Severity, string> = {
-  // Mild   — green: safe, gentle
+  // Mild     — green: safe, gentle
   Mild:     'bg-emerald-50 text-emerald-800 border-emerald-200',
-  // Moderate — blue: middle tier, clear but not severe
-  Moderate: 'bg-blue-50 text-blue-800 border-blue-200',
-  // Strong — gray/ink family
+  // Moderate — amber/yellow: caution. Blue was semantically wrong (info, not warning).
+  Moderate: 'bg-amber-50 text-amber-800 border-amber-200',
+  // Strong   — zinc: penultimate tier, muted-dark so Extreme reads as the peak
   Strong:   'bg-zinc-100 text-zinc-800 border-zinc-300',
-  // Extreme — black/ink: highest severity
-  Extreme:  'bg-[#1A1210] text-white border-[#1A1210]',
+  // Extreme  — near-black: highest severity, maximum weight
+  Extreme:  'bg-ink-900 text-white border-ink-900',
 };
 
 /*
@@ -48,7 +48,7 @@ const severityColors: Record<Severity, string> = {
   creating a rainbow of competing colors in cards. The medium is descriptive context,
   not a status — it doesn't need semantic color coding. Neutral reads cleanly.
 */
-const mediumNeutral = 'bg-[#F2EDEA] text-[#4A3F3A] border-[#D4CCC8]';
+const mediumNeutral = 'bg-ink-100 text-ink-700 border-ink-300';
 
 const categoryColors: Record<Category, string> = {
   // Categories retain color — they're the primary semantic classifier in the sidebar
@@ -62,7 +62,7 @@ const categoryColors: Record<Category, string> = {
 
 export default function Badge({ label, variant = 'neutral', size = 'sm', href, icon }: BadgeProps) {
   // Neutral: warm ink tint — the default surface for card-footer labels
-  let colorClass = 'bg-[#F2EDEA] text-[#4A3F3A] border-[#D4CCC8]';
+  let colorClass = 'bg-ink-100 text-ink-700 border-ink-300';
 
   if (variant === 'severity') {
     colorClass = severityColors[label as Severity] ?? colorClass;
@@ -97,7 +97,7 @@ export default function Badge({ label, variant = 'neutral', size = 'sm', href, i
 
   if (href) {
     return (
-      <Link href={href} className={className} style={{ textDecoration: 'none' }}>
+      <Link href={href} className={`${className} no-underline`}>
         {content}
       </Link>
     );
@@ -110,23 +110,3 @@ export default function Badge({ label, variant = 'neutral', size = 'sm', href, i
   );
 }
 
-/*
-  SeverityDot — compact status indicator used in card headers.
-  Solid dot only — no glow ring (the ring added visual noise without adding meaning;
-  the solid color is sufficient signal at this small size).
-*/
-export function SeverityDot({ severity }: { severity: Severity }) {
-  const dotColors: Record<Severity, string> = {
-    Mild:     'bg-emerald-500',
-    Moderate: 'bg-blue-500',
-    Strong:   'bg-zinc-600',
-    Extreme:  'bg-[#1A1210]',
-  };
-  return (
-    <span
-      className={`inline-block w-2 h-2 rounded-full flex-shrink-0 ${dotColors[severity]}`}
-      title={`Severity: ${severity}`}
-      aria-label={`Severity: ${severity}`}
-    />
-  );
-}

@@ -16,12 +16,12 @@ const Contribute: NextPage = () => {
           <p className="eyebrow mb-3">Contribute</p>
 
           <h1
-            className="font-display font-extrabold text-4xl sm:text-5xl mb-5 leading-tight"
-            style={{ color: '#1A1210', letterSpacing: '-0.025em' }}
+            className="font-display font-extrabold text-4xl sm:text-5xl mb-5 leading-tight text-ink-900"
+            style={{ letterSpacing: '-0.025em' }}
           >
             Add to the Archive
           </h1>
-          <p className="text-xl leading-relaxed" style={{ color: '#4A3F3A' }}>
+          <p className="text-xl leading-relaxed text-ink-700">
             The archive grows one entry at a time. If you&rsquo;ve found a fictional expletive that isn&rsquo;t here, here&rsquo;s how to add it.
           </p>
         </div>
@@ -32,26 +32,11 @@ const Contribute: NextPage = () => {
             "Before you contribute" callout — warm tinted box.
             Uses inline styles matching callout-warm utility token values.
           */}
-          <div
-            className="rounded-[1.25rem] p-5"
-            style={{
-              background: '#FFF4EE',
-              border: '1px solid rgba(245, 93, 53, 0.18)',
-            }}
-          >
-            <p
-              className="text-sm font-bold mb-1"
-              style={{ color: '#1A1210' }}
-            >
-              Check first
-            </p>
-            <p className="text-sm" style={{ color: '#4A3F3A' }}>
+          <div className="rounded-[1.25rem] p-5 bg-brand-warm-50 border border-brand-coral/20">
+            <p className="text-sm font-bold mb-1 text-ink-900">Check first</p>
+            <p className="text-sm text-ink-700">
               Check the{' '}
-              <Link
-                href="/browse"
-                className="underline transition-colors duration-150"
-                style={{ color: '#F55D35' }}
-              >
+              <Link href="/browse" className="underline text-brand-coral transition-colors duration-150">
                 browse page
               </Link>{' '}
               first to make sure the entry doesn&rsquo;t already exist. Use the search bar &mdash; we may have it under a
@@ -69,13 +54,13 @@ const Contribute: NextPage = () => {
           <h2>Required fields</h2>
 
           {/* Data table — uses warm surface, not gray-50 */}
-          <div className="overflow-x-auto rounded-[1.25rem]" style={{ border: '1px solid #F2EDEA' }}>
+          <div className="overflow-x-auto rounded-[1.25rem] border border-ink-100">
             <table className="w-full text-sm">
               <thead>
-                <tr style={{ background: '#F5EFEB' }}>
-                  <th className="px-4 py-3 text-left font-semibold" style={{ color: '#4A3F3A' }}>Field</th>
-                  <th className="px-4 py-3 text-left font-semibold" style={{ color: '#4A3F3A' }}>Type</th>
-                  <th className="px-4 py-3 text-left font-semibold" style={{ color: '#4A3F3A' }}>Description</th>
+                <tr className="bg-[#F5EFEB]">
+                  <th className="px-4 py-3 text-left font-semibold text-ink-700">Field</th>
+                  <th className="px-4 py-3 text-left font-semibold text-ink-700">Type</th>
+                  <th className="px-4 py-3 text-left font-semibold text-ink-700">Description</th>
                 </tr>
               </thead>
               <tbody>
@@ -102,13 +87,11 @@ const Contribute: NextPage = () => {
                 ].map(([field, type, desc], i) => (
                   <tr
                     key={field}
-                    style={{ borderTop: i > 0 ? '1px solid #F2EDEA' : 'none' }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#FFF8F4'; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+                    className={`hover:bg-brand-warm-50 transition-colors duration-100${i > 0 ? ' border-t border-ink-100' : ''}`}
                   >
-                    <td className="px-4 py-3 font-mono text-xs font-semibold" style={{ color: '#F55D35' }}>{field}</td>
+                    <td className="px-4 py-3 font-mono text-xs font-semibold text-brand-coral">{field}</td>
                     <td className="px-4 py-3 text-xs font-medium" style={{ color: '#6D28D9' }}>{type}</td>
-                    <td className="px-4 py-3" style={{ color: '#4A3F3A' }}>{desc}</td>
+                    <td className="px-4 py-3 text-ink-700">{desc}</td>
                   </tr>
                 ))}
               </tbody>
@@ -135,7 +118,7 @@ const Contribute: NextPage = () => {
           </p>
 
           <h2>Style guide</h2>
-          <ul className="list-disc list-inside space-y-2" style={{ color: '#4A3F3A' }}>
+          <ul className="list-disc list-inside space-y-2 text-ink-700">
             <li>Write in the present tense for in-universe descriptions.</li>
             <li>Keep <code className="inline-code">shortDescription</code> under 200 characters when possible.</li>
             <li>Narrative fields should be engaging &mdash; this is a reference archive, not a Wikipedia article.</li>
@@ -145,24 +128,21 @@ const Contribute: NextPage = () => {
           </ul>
 
           {/* Ready to contribute CTA panel */}
-          <div
-            className="mt-8 p-5 rounded-[1.25rem] flex flex-col sm:flex-row gap-4 items-start"
-            style={{ background: '#F5EFEB', border: '1px solid #F2EDEA' }}
-          >
+          <div className="mt-8 p-5 rounded-[1.25rem] flex flex-col sm:flex-row gap-4 items-start bg-[#F5EFEB] border border-ink-100">
             {/*
               Replaced the emoji (🎉) with a typographic glyph — stays in the site's visual register.
               The @#$! mark echoes the logo and hero decorations.
             */}
             <div
-              className="font-display font-extrabold leading-none flex-shrink-0 select-none"
-              style={{ fontSize: '2.5rem', color: 'rgba(245, 93, 53, 0.25)', letterSpacing: '-0.04em' }}
-              aria-hidden
+              className="font-display font-extrabold leading-none flex-shrink-0 select-none text-brand-coral"
+              style={{ fontSize: '2.5rem', opacity: 0.25, letterSpacing: '-0.04em' }}
+              aria-hidden={true}
             >
               @#$!
             </div>
             <div>
-              <p className="font-bold mb-1" style={{ color: '#1A1210' }}>Ready to add an entry?</p>
-              <p className="text-sm mb-3" style={{ color: '#6B5E58' }}>
+              <p className="font-bold mb-1 text-ink-900">Ready to add an entry?</p>
+              <p className="text-sm mb-3 text-ink-600">
                 Fork the repository on GitHub, add your entry following this guide, and open a pull request.
                 All contributions are reviewed by a maintainer before merging.
               </p>
@@ -170,10 +150,7 @@ const Contribute: NextPage = () => {
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-white text-sm font-semibold transition-colors duration-150"
-                style={{ background: '#1A1210' }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#2D2420'; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = '#1A1210'; }}
+                className="inline-flex items-center gap-2 px-4 py-3 rounded-xl text-white text-sm font-semibold bg-ink-900 hover:bg-ink-800 transition-colors duration-150"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />

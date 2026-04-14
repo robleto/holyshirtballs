@@ -28,30 +28,22 @@ const MediumIndexPage: NextPage<MediumIndexProps> = ({ mediums }) => {
       <div className="max-w-6xl mx-auto px-4 py-10">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm mb-8" aria-label="Breadcrumb">
-          <Link
-            href="/"
-            className="transition-colors duration-150"
-            style={{ color: '#B0A49E' }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
-          >
+          <Link href="/" className="text-ink-400 hover:text-brand-coral transition-colors duration-150">
             Home
           </Link>
-          <span style={{ color: '#D4CCC8' }}>/</span>
-          <span style={{ color: '#4A3F3A' }}>Medium</span>
+          <span className="text-ink-200">/</span>
+          <span className="text-ink-700">Medium</span>
         </nav>
 
-        <header className="pb-10 mb-10 border-b max-w-3xl" style={{ borderColor: '#F2EDEA' }}>
-          <p className="text-xs font-bold uppercase mb-4" style={{ color: '#F55D35', letterSpacing: '0.15em' }}>
-            Browse by
-          </p>
+        <header className="pb-10 mb-10 border-b border-ink-100 max-w-3xl">
+          <p className="eyebrow mb-4">Browse by</p>
           <h1
-            className="font-display font-extrabold leading-none mb-4"
-            style={{ fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', color: '#1A1210', letterSpacing: '-0.02em' }}
+            className="font-display font-extrabold leading-none mb-4 text-ink-900"
+            style={{ fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', letterSpacing: '-0.02em' }}
           >
             Medium
           </h1>
-          <p className="leading-relaxed" style={{ fontSize: '1.125rem', color: '#2D2420', maxWidth: '52ch' }}>
+          <p className="leading-relaxed text-ink-800" style={{ fontSize: '1.125rem', maxWidth: '52ch' }}>
             The archive spans six mediums. Each one has a different relationship to invented language.
           </p>
         </header>
@@ -61,25 +53,16 @@ const MediumIndexPage: NextPage<MediumIndexProps> = ({ mediums }) => {
             <Link
               key={name}
               href={`/medium/${name.toLowerCase()}`}
-              className="group block rounded-[1.25rem] bg-white p-6 border transition-[border-color,box-shadow,transform] duration-200 ease-in-out hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
-              style={{ borderColor: '#F2EDEA', boxShadow: '0 1px 3px rgba(26,18,16,0.06)' }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,93,53,0.35)';
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(26,18,16,0.10)';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = '#F2EDEA';
-                (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(26,18,16,0.06)';
-              }}
+              className="card block p-6"
             >
               <div className="flex items-center gap-2 mb-3">
-                <MediumIcon medium={name} size={20} className="text-[#F55D35]" />
-                <h2 className="font-display font-extrabold text-xl" style={{ color: '#1A1210' }}>{name}</h2>
+                <MediumIcon medium={name} size={20} className="text-brand-coral" />
+                <h2 className="font-display font-extrabold text-xl text-ink-900">{name}</h2>
               </div>
-              <p className="text-sm leading-relaxed mb-4" style={{ color: '#6B5E58' }}>
+              <p className="text-sm leading-relaxed mb-4 text-ink-600">
                 {MEDIUM_FRAMES[name]}
               </p>
-              <p className="text-xs font-semibold" style={{ color: '#B0A49E' }}>
+              <p className="text-xs font-semibold text-ink-400">
                 {count} {count === 1 ? 'entry' : 'entries'}
               </p>
             </Link>

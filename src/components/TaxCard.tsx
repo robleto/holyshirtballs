@@ -70,25 +70,16 @@ export default function TaxCard({ href, type, name, description, count }: TaxCar
   return (
     <Link
       href={href}
-      className="group block rounded-[1.25rem] bg-white p-5 border transition-[border-color,box-shadow,transform] duration-200 ease-in-out hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
-      style={{ borderColor: '#F2EDEA', boxShadow: '0 1px 3px rgba(26,18,16,0.06)' }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,93,53,0.35)';
-        (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(26,18,16,0.10)';
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = '#F2EDEA';
-        (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(26,18,16,0.06)';
-      }}
+      className="card group block p-5 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
     >
       <div className="flex items-center gap-2 mb-2" style={{ color: accentColor }}>
         {icon}
         <span className="font-display font-extrabold text-lg leading-none">{name}</span>
       </div>
-      <p className="text-sm leading-relaxed mb-3" style={{ color: '#6B5E58' }}>
+      <p className="text-sm leading-relaxed mb-3 text-ink-600">
         {description}
       </p>
-      <p className="text-xs font-semibold" style={{ color: '#B0A49E' }}>
+      <p className="text-xs font-semibold text-ink-500">
         {count} {count === 1 ? 'entry' : 'entries'}
       </p>
     </Link>

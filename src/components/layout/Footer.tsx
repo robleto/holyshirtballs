@@ -16,23 +16,17 @@ import LogoIcon from '@/components/ui/LogoIcon';
 */
 export default function Footer() {
   return (
-    <footer
-      className="border-t"
-      style={{
-        background: '#F5EFEB',
-        borderTopColor: '#F2EDEA',
-      }}
-    >
+    <footer className="border-t border-ink-100 bg-[#F5EFEB]">
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
 
           {/* Brand block */}
           <div>
-            <p className="flex items-center gap-2 font-display font-extrabold text-lg mb-2" style={{ color: '#1A1210' }}>
+            <p className="flex items-center gap-2 font-display font-extrabold text-lg mb-2 text-ink-900">
               <LogoIcon size={22} />
               HolyShirtBalls
             </p>
-            <p className="text-sm leading-relaxed" style={{ color: '#6B5E58' }}>
+            <p className="text-sm leading-relaxed text-ink-600">
               The definitive archive of fictional profanity from film, TV, books, comics, and games.
               All entries are fictional. No real people were insulted in the making of this site.
             </p>
@@ -40,12 +34,7 @@ export default function Footer() {
 
           {/* Navigation column */}
           <div>
-            <p
-              className="text-xs font-bold uppercase mb-3"
-              style={{ letterSpacing: '0.09em', color: '#F55D35' }}
-            >
-              Explore
-            </p>
+            <p className="section-label mb-3">Explore</p>
             <nav className="flex flex-col gap-2">
               {[
                 { href: '/browse',          label: 'Explore All' },
@@ -58,10 +47,7 @@ export default function Footer() {
                 <Link
                   key={href}
                   href={href}
-                  className="text-sm transition-colors duration-150"
-                  style={{ color: '#6B5E58' }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#6B5E58'; }}
+                  className="text-sm text-ink-600 hover:text-brand-coral transition-colors duration-150"
                 >
                   {label}
                 </Link>
@@ -71,12 +57,7 @@ export default function Footer() {
 
           {/* Community column */}
           <div>
-            <p
-              className="text-xs font-bold uppercase mb-3"
-              style={{ letterSpacing: '0.09em', color: '#F55D35' }}
-            >
-              Community
-            </p>
+            <p className="section-label mb-3">Community</p>
             <nav className="flex flex-col gap-2">
               {[
                 { href: '/about',          label: 'About the Project' },
@@ -87,10 +68,7 @@ export default function Footer() {
                   key={href}
                   href={href}
                   {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  className="text-sm transition-colors duration-150"
-                  style={{ color: '#6B5E58' }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#6B5E58'; }}
+                  className="text-sm text-ink-600 hover:text-brand-coral transition-colors duration-150"
                 >
                   {label}
                 </Link>
@@ -100,14 +78,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div
-          className="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-3"
-          style={{ borderTopColor: '#E8E2DE' }}
-        >
-          <p className="text-xs" style={{ color: '#B0A49E' }}>
+        <div className="border-t border-ink-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-ink-400">
             All fictional. All documented. None legally actionable.
           </p>
-          <p className="text-xs" style={{ color: '#B0A49E' }}>
+          <p className="text-xs text-ink-400">
             Open source &mdash; contributions welcome via pull request.
           </p>
         </div>

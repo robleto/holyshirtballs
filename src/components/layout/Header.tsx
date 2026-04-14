@@ -39,21 +39,15 @@ export default function Header() {
 
   return (
     <header
-      className="sticky top-0 z-40 backdrop-blur-sm border-b"
-      style={{
-        background: 'rgba(255, 252, 249, 0.96)',  /* warm parchment, slightly transparent */
-        borderBottomColor: '#F2EDEA',
-      }}
+      className="sticky top-0 z-40 backdrop-blur-sm border-b border-ink-100"
+      style={{ background: 'rgba(255, 252, 249, 0.96)' }}
     >
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
 
         {/* Logo — display font, coral glyph */}
         <Link
           href="/"
-          className="flex items-center gap-1.5 font-display font-extrabold text-lg shrink-0 transition-colors duration-150"
-          style={{ color: '#1A1210' }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#1A1210'; }}
+          className="flex items-center gap-1.5 font-display font-extrabold text-lg shrink-0 text-ink-900 hover:text-brand-coral transition-colors duration-150"
         >
           <LogoIcon size={22} />
           <span>HolyShirtBalls</span>
@@ -66,24 +60,12 @@ export default function Header() {
               <Link
                 key={href}
                 href={href}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150"
-                style={
+                className={[
+                  'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150',
                   isActive(href)
-                    ? { background: '#FFF4EE', color: '#F55D35' }
-                    : { color: '#4A3F3A' }
-                }
-                onMouseEnter={(e) => {
-                  if (!isActive(href)) {
-                    (e.currentTarget as HTMLElement).style.background = '#FAF7F5';
-                    (e.currentTarget as HTMLElement).style.color = '#1A1210';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive(href)) {
-                    (e.currentTarget as HTMLElement).style.background = 'transparent';
-                    (e.currentTarget as HTMLElement).style.color = '#4A3F3A';
-                  }
-                }}
+                    ? 'bg-brand-warm-50 text-brand-coral'
+                    : 'text-ink-700 hover:bg-ink-50 hover:text-ink-900',
+                ].join(' ')}
               >
                 <Icon size={14} strokeWidth={2} aria-hidden />
                 {label}
@@ -93,13 +75,10 @@ export default function Header() {
 
           {/* Mobile menu toggle */}
           <button
-            className="md:hidden p-2 rounded-lg transition-colors duration-150"
-            style={{ color: '#6B5E58' }}
+            className="md:hidden p-3 rounded-lg text-ink-600 hover:bg-ink-50 transition-colors duration-150"
             onClick={() => setMenuOpen((o) => !o)}
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#FAF7F5'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
           >
             {menuOpen ? (
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -117,22 +96,19 @@ export default function Header() {
       {/* Mobile menu — warm background, same as header */}
       {menuOpen && (
         <div
-          className="md:hidden border-t px-4 py-3 flex flex-col gap-0.5 animate-fade-in"
-          style={{
-            background: 'rgba(255, 252, 249, 0.98)',
-            borderTopColor: '#F2EDEA',
-          }}
+          className="md:hidden border-t border-ink-100 px-4 py-3 flex flex-col gap-0.5 animate-fade-in"
+          style={{ background: 'rgba(255, 252, 249, 0.98)' }}
         >
           {nav.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150"
-              style={
+              className={[
+                'inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150',
                 isActive(href)
-                  ? { background: '#FFF4EE', color: '#F55D35' }
-                  : { color: '#4A3F3A' }
-              }
+                  ? 'bg-brand-warm-50 text-brand-coral'
+                  : 'text-ink-700 hover:bg-ink-50 hover:text-ink-900',
+              ].join(' ')}
             >
               <Icon size={14} strokeWidth={2} aria-hidden />
               {label}

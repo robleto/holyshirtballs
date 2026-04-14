@@ -36,53 +36,35 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, entries }) => {
       <div className="max-w-6xl mx-auto px-4 py-10">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm mb-8" aria-label="Breadcrumb">
-          <Link
-            href="/"
-            className="transition-colors duration-150"
-            style={{ color: '#B0A49E' }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
-          >
+          <Link href="/" className="text-ink-400 hover:text-brand-coral transition-colors duration-150">
             Home
           </Link>
-          <span style={{ color: '#D4CCC8' }}>/</span>
-          <Link
-            href="/category"
-            className="transition-colors duration-150"
-            style={{ color: '#B0A49E' }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
-          >
+          <span className="text-ink-200">/</span>
+          <Link href="/category" className="text-ink-400 hover:text-brand-coral transition-colors duration-150">
             Category
           </Link>
-          <span style={{ color: '#D4CCC8' }}>/</span>
-          <span style={{ color: '#4A3F3A' }}>{category}</span>
+          <span className="text-ink-200">/</span>
+          <span className="text-ink-700">{category}</span>
         </nav>
 
         {/* Page header */}
-        <header className="pb-10 mb-10 border-b max-w-3xl" style={{ borderColor: '#F2EDEA' }}>
-          <p
-            className="text-xs font-bold uppercase mb-4"
-            style={{ color: '#F55D35', letterSpacing: '0.15em' }}
-          >
-            Category
-          </p>
+        <header className="pb-10 mb-10 border-b border-ink-100 max-w-3xl">
+          <p className="eyebrow mb-4">Category</p>
           <h1
-            className="font-display font-extrabold leading-none mb-6"
+            className="font-display font-extrabold leading-none mb-6 text-ink-900"
             style={{
               fontSize: 'clamp(2.5rem, 7vw, 4.5rem)',
-              color: '#1A1210',
               letterSpacing: '-0.02em',
             }}
           >
             {category}
           </h1>
           {frame && (
-            <p className="leading-relaxed mb-6" style={{ fontSize: '1.125rem', color: '#2D2420', maxWidth: '52ch' }}>
+            <p className="leading-relaxed mb-6 text-ink-800" style={{ fontSize: '1.125rem', maxWidth: '52ch' }}>
               {frame}
             </p>
           )}
-          <p className="text-sm" style={{ color: '#8C807A' }}>
+          <p className="text-sm text-ink-500">
             {entries.length} {entries.length === 1 ? 'entry' : 'entries'} in the archive
           </p>
         </header>

@@ -13,6 +13,7 @@ interface EntryPageProps {
   entry: Entry;
   related: Entry[];
   franchiseCount: number;
+  franchiseEntries: Entry[];
 }
 
 /*
@@ -32,13 +33,10 @@ interface EntryPageProps {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="py-7">
-      <h2
-        className="font-sans text-xs font-bold uppercase pb-3 mb-4 border-b"
-        style={{ color: '#F55D35', letterSpacing: '0.09em', borderColor: '#F2EDEA' }}
-      >
+      <h2 className="section-label pb-3 mb-4 border-b border-ink-100">
         {title}
       </h2>
-      <div style={{ color: '#4A3F3A', lineHeight: '1.7' }}>{children}</div>
+      <div className="text-ink-700" style={{ lineHeight: '1.7' }}>{children}</div>
     </div>
   );
 }
@@ -55,31 +53,17 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 */
 function SemanticTimeline({ data }: { data: SemanticDriftEntry[] | string }) {
   if (typeof data === 'string') {
-    return <p style={{ color: '#4A3F3A', lineHeight: '1.7' }}>{data}</p>;
+    return <p className="text-ink-700" style={{ lineHeight: '1.7' }}>{data}</p>;
   }
   return (
-    <ol className="relative space-y-4 pl-5" style={{ borderLeft: '2px solid #F2EDEA' }}>
+    <ol className="relative space-y-4 pl-5 timeline-line">
       {data.map((item, i) => (
         <li key={i} className="relative">
-          {/* Coral dot — solid only, no glow ring */}
-          <span
-            className="absolute rounded-full"
-            style={{
-              left: '-1.375rem',
-              top: '0.25rem',
-              width: '0.75rem',
-              height: '0.75rem',
-              background: '#F55D35',
-              border: '2px solid #FFFCF9',   /* matches body bg for clean dot separation */
-            }}
-          />
-          <p
-            className="text-xs font-bold uppercase mb-0.5"
-            style={{ color: '#8C807A', letterSpacing: '0.08em' }}
-          >
+          <span className="timeline-dot absolute" style={{ left: '-1.375rem', top: '0.25rem' }} />
+          <p className="text-xs font-bold uppercase mb-0.5 text-ink-500" style={{ letterSpacing: '0.08em' }}>
             {item.period}
           </p>
-          <p className="text-sm" style={{ color: '#4A3F3A' }}>{item.meaning}</p>
+          <p className="text-sm text-ink-700">{item.meaning}</p>
         </li>
       ))}
     </ol>
@@ -118,25 +102,11 @@ function SharePanel({ entry }: { entry: Entry }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const btnBase = {
-    borderColor: '#E8E2DE', color: '#8C807A', background: 'white',
-  };
-  const btnHover = (e: React.MouseEvent<HTMLElement>) => {
-    (e.currentTarget as HTMLElement).style.borderColor = '#F55D35';
-    (e.currentTarget as HTMLElement).style.color = '#F55D35';
-    (e.currentTarget as HTMLElement).style.background = '#FFF4EE';
-  };
-  const btnLeave = (e: React.MouseEvent<HTMLElement>) => {
-    (e.currentTarget as HTMLElement).style.borderColor = '#E8E2DE';
-    (e.currentTarget as HTMLElement).style.color = '#8C807A';
-    (e.currentTarget as HTMLElement).style.background = 'white';
-  };
+  const shareBtnClass = 'inline-flex items-center justify-center h-11 rounded-xl border border-ink-200 text-ink-500 bg-white hover:border-brand-coral hover:text-brand-coral hover:bg-brand-warm-50 transition-all duration-150';
 
   return (
-    <div className="rounded-[1.25rem] p-5" style={{ background: 'white', border: '1px solid #F2EDEA' }}>
-      <h2 className="font-sans text-xs font-bold uppercase mb-4" style={{ color: '#F55D35', letterSpacing: '0.09em' }}>
-        Share
-      </h2>
+    <div className="rounded-2xl p-5 bg-white border border-ink-100">
+      <h2 className="section-label mb-4">Share</h2>
       <div className="grid grid-cols-3 gap-2">
         {links.map(({ label, href, Icon }) => (
           <a
@@ -145,10 +115,7 @@ function SharePanel({ entry }: { entry: Entry }) {
             target="_blank"
             rel="noopener noreferrer"
             title={`Share on ${label}`}
-            className="inline-flex items-center justify-center h-9 rounded-xl border transition-all duration-150"
-            style={btnBase}
-            onMouseEnter={btnHover}
-            onMouseLeave={btnLeave}
+            className={shareBtnClass}
           >
             <Icon size={16} aria-hidden />
             <span className="sr-only">{label}</span>
@@ -159,10 +126,10 @@ function SharePanel({ entry }: { entry: Entry }) {
         <button
           onClick={handleInstagram}
           title={copied ? 'Copied!' : 'Share on Instagram'}
-          className="inline-flex items-center justify-center h-9 rounded-xl border transition-all duration-150"
-          style={copied ? { borderColor: '#059669', color: '#059669', background: 'white' } : btnBase}
-          onMouseEnter={copied ? undefined : btnHover}
-          onMouseLeave={copied ? undefined : btnLeave}
+          className={copied
+            ? 'inline-flex items-center justify-center h-11 rounded-xl border border-severity-mild text-severity-mild bg-white transition-all duration-150'
+            : shareBtnClass
+          }
         >
           {copied
             ? <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
@@ -175,8 +142,47 @@ function SharePanel({ entry }: { entry: Entry }) {
   );
 }
 
+/* ── Franchise panel — other entries from the same franchise ─────────── */
+function FranchisePanel({ entries, franchiseName }: { entries: Entry[]; franchiseName: string }) {
+  if (!entries.length) return null;
+  return (
+    <section aria-label={`More from ${franchiseName}`}>
+      <div className="flex items-baseline justify-between mb-4">
+        <h2 className="section-label">Also from</h2>
+        <Link
+          href={`/franchise/${franchiseToSlug(franchiseName)}`}
+          className="text-xs font-medium text-brand-coral hover:underline transition-colors duration-150 truncate ml-2"
+        >
+          {franchiseName} →
+        </Link>
+      </div>
+      <div className="flex flex-col gap-2">
+        {entries.map((e) => (
+          <Link
+            key={e.slug}
+            href={`/entry/${e.slug}`}
+            className="group card flex items-start gap-3 p-3.5"
+          >
+            <div className="flex-1 min-w-0">
+              <p className="font-display font-bold text-[0.9375rem] truncate text-ink-900 group-hover:text-brand-coral transition-colors duration-150">
+                {e.term}
+              </p>
+              <p className="text-xs truncate mt-0.5 text-ink-500">
+                {e.category} · {e.severity}
+              </p>
+            </div>
+            <div className="shrink-0 mt-0.5">
+              <Badge label={e.severity} variant="severity" size="sm" />
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /* ── Main page ─────────────────────────────────────────────────────────── */
-const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount }) => {
+const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount, franchiseEntries }) => {
 
   return (
     <>
@@ -189,42 +195,27 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
 
       <div className="max-w-4xl mx-auto px-4 py-10">
 
-        {/* Breadcrumb — warm muted text, coral hover */}
+        {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm mb-8" aria-label="Breadcrumb">
-          <Link
-            href="/"
-            className="transition-colors duration-150"
-            style={{ color: '#B0A49E' }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
-          >
+          <Link href="/" className="text-ink-400 hover:text-brand-coral transition-colors duration-150">
             Home
           </Link>
-          <span style={{ color: '#D4CCC8' }}>/</span>
-          <Link
-            href="/browse"
-            className="transition-colors duration-150"
-            style={{ color: '#B0A49E' }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#B0A49E'; }}
-          >
+          <span className="text-ink-300">/</span>
+          <Link href="/browse" className="text-ink-400 hover:text-brand-coral transition-colors duration-150">
             Explore
           </Link>
-          <span style={{ color: '#D4CCC8' }}>/</span>
-          <span style={{ color: '#4A3F3A' }}>{entry.term}</span>
+          <span className="text-ink-300">/</span>
+          <span className="text-ink-700">{entry.term}</span>
         </nav>
 
         {/* Entry header */}
         <header className="mb-10">
           {/* Franchise + medium icon */}
           <div className="flex items-center gap-1.5 mb-4">
-            <MediumIcon medium={entry.medium} size={14} className="text-[#B0A49E]" />
+            <MediumIcon medium={entry.medium} size={14} className="text-ink-400" />
             <Link
               href={`/franchise/${franchiseToSlug(entry.franchise)}`}
-              className="text-sm font-medium transition-colors duration-150"
-              style={{ color: '#8C807A' }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#F55D35'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#8C807A'; }}
+              className="text-sm font-medium text-ink-500 hover:text-brand-coral transition-colors duration-150"
             >
               {entry.franchise}
             </Link>
@@ -232,10 +223,9 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
 
           {/* Term — the hero display type */}
           <h1
-            className="font-display font-extrabold leading-none mb-4"
+            className="font-display font-extrabold leading-none mb-4 text-ink-900"
             style={{
               fontSize: 'clamp(3rem, 8vw, 5.5rem)',
-              color: '#1A1210',
               letterSpacing: '-0.03em',
             }}
           >
@@ -243,25 +233,19 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
           </h1>
 
           {/* Pronunciation + POS */}
-          <p className="mb-3" style={{ color: '#8C807A', fontSize: '1.05rem' }}>
+          <p className="mb-3 text-ink-500" style={{ fontSize: '1.05rem' }}>
             <span className="font-mono text-base">/{entry.phoneticPronunciation}/</span>
             {' '}
-            <span className="italic" style={{ color: '#B0A49E', fontSize: '1rem' }}>{entry.partOfSpeech}</span>
+            <span className="italic text-ink-400" style={{ fontSize: '1rem' }}>{entry.partOfSpeech}</span>
           </p>
 
           {/* English equivalent — coral accent, editorial register */}
-          <p
-            className="font-semibold mb-5"
-            style={{ fontSize: '1.375rem', color: '#4A3F3A' }}
-          >
-            &#8776; &ldquo;<span style={{ color: '#F55D35' }}>{entry.englishEquivalent}</span>&rdquo;
+          <p className="font-semibold mb-5 text-ink-700" style={{ fontSize: '1.375rem' }}>
+            &#8776; &ldquo;<span className="text-brand-coral">{entry.englishEquivalent}</span>&rdquo;
           </p>
 
           {/* Short description — lead paragraph */}
-          <p
-            className="leading-relaxed max-w-2xl mb-6"
-            style={{ fontSize: '1.0625rem', color: '#2D2420' }}
-          >
+          <p className="leading-relaxed max-w-2xl mb-6 text-ink-800" style={{ fontSize: '1.0625rem' }}>
             {entry.shortDescription}
           </p>
 
@@ -284,12 +268,12 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
                 }}
               >
                 <blockquote
-                  className="leading-relaxed italic mb-2"
-                  style={{ fontSize: '1.0625rem', color: '#4A3F3A' }}
+                  className="leading-relaxed italic mb-2 text-ink-700"
+                  style={{ fontSize: '1.0625rem' }}
                 >
                   &ldquo;{entry.exampleQuote.text}&rdquo;
                 </blockquote>
-                <cite className="text-sm not-italic" style={{ color: '#8C807A' }}>
+                <cite className="text-sm not-italic text-ink-500">
                   &mdash; {entry.notableSpeaker || entry.exampleQuote.source}
                 </cite>
               </div>
@@ -331,12 +315,7 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
                   {entry.realWorldEuphemisms.map((e) => (
                     <span
                       key={e}
-                      className="px-3 py-1 rounded-full text-sm"
-                      style={{
-                        background: '#F5EFEB',
-                        color: '#4A3F3A',
-                        border: '1px solid #E8E2DE',
-                      }}
+                      className="px-3 py-1 rounded-full text-sm bg-[#F5EFEB] text-ink-700 border border-ink-200"
                     >
                       {e}
                     </span>
@@ -349,16 +328,8 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
           {/* Sidebar */}
           <aside className="space-y-8">
             {/* Quick facts panel */}
-            <div
-              className="rounded-[1.25rem] p-5"
-              style={{ background: '#F5EFEB', border: '1px solid #F2EDEA' }}
-            >
-              <h2
-                className="font-sans text-xs font-bold uppercase mb-4"
-                style={{ color: '#F55D35', letterSpacing: '0.09em' }}
-              >
-                At a Glance
-              </h2>
+            <div className="sidebar-panel">
+              <h2 className="section-label mb-4">At a Glance</h2>
               <dl className="space-y-3">
                 {[
                   { label: 'Notable Speaker', value: entry.notableSpeaker },
@@ -369,8 +340,8 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
                 ].map(({ label, value }) =>
                   value ? (
                     <div key={label}>
-                      <dt className="text-xs font-semibold" style={{ color: '#B0A49E' }}>{label}</dt>
-                      <dd className="text-sm mt-0.5" style={{ color: '#2D2420' }}>{value}</dd>
+                      <dt className="text-xs font-semibold text-ink-400">{label}</dt>
+                      <dd className="text-sm mt-0.5 text-ink-800">{value}</dd>
                     </div>
                   ) : null
                 )}
@@ -378,22 +349,17 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
             </div>
 
             {/* Classification panel */}
-            <div
-              className="rounded-[1.25rem] p-5"
-              style={{ background: 'white', border: '1px solid #F2EDEA' }}
-            >
-              <h2
-                className="font-sans text-xs font-bold uppercase mb-4"
-                style={{ color: '#F55D35', letterSpacing: '0.09em' }}
-              >
-                Classification
-              </h2>
+            <div className="rounded-2xl p-5 bg-white border border-ink-100">
+              <h2 className="section-label mb-4">Classification</h2>
               <div className="flex flex-wrap gap-2">
                 <Badge label={entry.severity} variant="severity" size="md" href={`/severity/${entry.severity.toLowerCase()}`} />
                 <Badge label={entry.category} variant="category" size="md" href={`/category/${entry.category.toLowerCase()}`} />
                 <Badge label={entry.medium} variant="medium" size="md" href={`/medium/${entry.medium.toLowerCase()}`} icon={<MediumIcon medium={entry.medium} size={14} />} />
               </div>
             </div>
+
+            {/* More from this franchise */}
+            <FranchisePanel entries={franchiseEntries} franchiseName={entry.franchise} />
 
             {/* Related entries */}
             {related.length > 0 && <RelatedEntries entries={related} />}
@@ -405,10 +371,7 @@ const EntryPage: NextPage<EntryPageProps> = ({ entry, related, franchiseCount })
             <div className="text-center">
               <Link
                 href="/browse"
-                className="text-sm font-medium transition-colors duration-150"
-                style={{ color: '#F55D35' }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
+                className="text-sm font-medium text-brand-coral hover:underline transition-colors duration-150"
               >
                 &larr; Back to Explore
               </Link>
@@ -437,9 +400,12 @@ export const getStaticProps: GetStaticProps<EntryPageProps> = ({ params }) => {
 
   const related = getRelatedEntries(entry, 4);
   const franchiseCount = allEntries.filter((e) => e.franchise === entry.franchise).length;
+  const franchiseEntries = getEntriesByFranchise(entry.franchise)
+    .filter((e) => e.slug !== slug)
+    .slice(0, 4);
 
   return {
-    props: { entry, related, franchiseCount },
+    props: { entry, related, franchiseCount, franchiseEntries },
   };
 };
 

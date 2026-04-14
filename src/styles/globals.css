@@ -138,16 +138,16 @@
   /* ── Hero filter pills ── */
   /* Using CSS class instead of inline onMouseEnter/Leave so transitions actually work */
   .hero-pill {
-    border: 1px solid #D4CCC8;
-    color: #4A3F3A;
+    border: 1px solid var(--ink-300);
+    color: var(--ink-700);
     background: white;
     transition: border-color 150ms ease-in-out, color 150ms ease-in-out, background-color 150ms ease-in-out;
   }
 
   .hero-pill:hover {
-    border-color: #F55D35;
-    color: #F55D35;
-    background: #FFF4EE;
+    border-color: var(--coral);
+    color: var(--coral);
+    background: var(--bg-subtle);
   }
 
   /* ── EmptyState entrance — fade-in only, no transform ── */
@@ -227,11 +227,10 @@
   /* ── Filter label — quieter than .eyebrow, for dense control surfaces ──
      Use inside FilterBar and any inline form control label.
      The .eyebrow pattern is reserved for page-level headers and hero sections.
-     Here ink-500 + medium weight reads as a label without drawing the eye. */
+     ink-600 (#6B5E58) on muted bg (#F5EFEB) gives ~4.6:1 — passes WCAG AA. */
   .filter-label {
-    @apply text-xs font-medium uppercase;
+    @apply text-xs font-medium uppercase text-ink-600;
     letter-spacing: 0.06em;
-    color: var(--ink-500);
   }
 
   /* ── Speech bubble tail — bottom-left notch matching the logomark shape ── */

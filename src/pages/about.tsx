@@ -23,12 +23,12 @@ const About: NextPage<AboutProps> = ({ entryCount, franchiseCount }) => {
           <p className="eyebrow mb-3">About the Project</p>
 
           <h1
-            className="font-display font-extrabold text-4xl sm:text-5xl mb-5 leading-tight"
-            style={{ color: '#1A1210', letterSpacing: '-0.025em' }}
+            className="font-display font-extrabold text-4xl sm:text-5xl mb-5 leading-tight text-ink-900"
+            style={{ letterSpacing: '-0.025em' }}
           >
             Why study fictional profanity?
           </h1>
-          <p className="text-xl leading-relaxed" style={{ color: '#4A3F3A' }}>
+          <p className="text-xl leading-relaxed text-ink-700">
             Because the words a fictional world invents to swear by tell you everything about that world.
           </p>
         </div>
@@ -36,7 +36,7 @@ const About: NextPage<AboutProps> = ({ entryCount, franchiseCount }) => {
         {/* Body content */}
         <div className="prose-entry space-y-6">
           <p>
-            <strong style={{ color: '#1A1210' }}>HolyShirtBalls</strong> is an open archive and reference
+            <strong>HolyShirtBalls</strong> is an open archive and reference
             site for fictional profanity &mdash; the made-up swear words, curses, insults, euphemisms, and
             taboo expressions invented by writers, game designers, and screenwriters to give their invented
             worlds texture and emotional weight.
@@ -67,10 +67,7 @@ const About: NextPage<AboutProps> = ({ entryCount, franchiseCount }) => {
             real-world cultural footprint. The archive currently spans{' '}
             <Link
               href="/browse"
-              className="transition-colors duration-150"
-              style={{ color: '#F55D35' }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
+              className="text-brand-coral hover:underline transition-colors duration-150"
             >
               {entryCount} entries across {franchiseCount} franchises
             </Link>{' '}
@@ -101,10 +98,7 @@ const About: NextPage<AboutProps> = ({ entryCount, franchiseCount }) => {
           <p>
             <Link
               href="/contribute"
-              className="transition-colors duration-150"
-              style={{ color: '#F55D35' }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
+              className="text-brand-coral hover:underline transition-colors duration-150"
             >
               See the contribution guide &rarr;
             </Link>
