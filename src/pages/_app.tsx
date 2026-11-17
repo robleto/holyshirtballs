@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from 'next/font/google';
 import '@/styles/globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-body',
@@ -20,6 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <div className={`${inter.variable} ${playfair.variable} min-h-screen flex flex-col`}>
       <Header />
       <main className="flex-1">
+        <GoogleAnalytics />
         <Component {...pageProps} />
       </main>
       <Footer />
